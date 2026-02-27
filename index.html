@@ -76,12 +76,12 @@
                     <a href="#brand-story" class="hover:text-deep-wine transition-colors">틈 이야기</a>
                     <a href="#gateway" class="hover:text-deep-wine transition-colors">서비스 시작</a>
                 </nav>
-                <button onclick="openModal()" class="text-sm md:text-[15px] font-bold text-deep-forest hover:text-deep-wine transition-colors">
-                    로그인
-                </button>
-                <button onclick="openModal()" class="bg-deep-forest text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full font-bold text-[12px] md:text-[14px] hover:bg-deep-forest-hover transition-all duration-300 shadow-sm">
-                    회원가입
-                </button>
+                <button id="headerLoginBtn" onclick="openModal()" class="text-sm md:text-[15px] font-bold text-deep-forest ...">
+    로그인
+</button>
+<button id="headerSignupBtn" onclick="openModal()" class="bg-deep-forest text-white px-4 py-2 ...">
+    회원가입
+</button>
             </div>
         </div>
     </header>
@@ -290,7 +290,7 @@
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5.523 0-10 3.52-10 7.864 0 2.768 1.83 5.232 4.606 6.64-.265 1.053-1.002 3.666-1.026 3.79-.033.167.054.267.158.267.085 0 .153-.023.235-.08 0 0 3.328-2.316 4.744-3.32.42.062.85.093 1.283.093 5.523 0 10-3.52 10-7.864C22 6.52 17.523 3 12 3z"/></svg>
                     카카오로 3초 만에 시작하기
                 </a>
-                <button onclick="alert('준비 중인 기능입니다. 카카오로 시작해주세요!')" class="flex items-center justify-center gap-3 w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-4 font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                <button onclick="loginWithGoogle()" class="flex items-center justify-center gap-3 w-full bg-white border ... ">
                     <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                     Google로 시작하기
                 </button>
@@ -314,5 +314,78 @@
             }, 200);
         }
     </script>
+    <!-- Firebase SDK 로드 -->
+    <script type="module">
+        // Firebase 핵심 기능 가져오기
+        import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js)";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js)";
+
+        // ★ 여기에 Step 3에서 복사한 본인의 firebaseConfig 코드를 넣으세요!
+        const firebaseConfig = {
+  apiKey: "AIzaSyBkJyboKHl-3TACmqjt3hsL6KByXIxOKuE",
+  authDomain: "teum-app.firebaseapp.com",
+  projectId: "teum-app",
+  storageBucket: "teum-app.firebasestorage.app",
+  messagingSenderId: "1033846224941",
+  appId: "1:1033846224941:web:4f85f53573a691203460a4"
+        };
+
+        // Firebase 초기화
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 로그인 버튼 클릭 시 실행될 함수
+        window.loginWithGoogle = function() {
+            signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                alert(user.displayName + "님, 환영합니다!"); // 성공 알림
+                closeModal(); // 팝업 닫기
+            }).catch((error) => {
+                console.error(error);
+                alert("로그인 실패: " + error.message);
+            });
+        };
+
+        // 사용자 로그인 상태 감지 (UI 변경)
+        onAuthStateChanged(auth, (user) => {
+            const loginBtn = document.getElementById('headerLoginBtn');
+            const signupBtn = document.getElementById('headerSignupBtn');
+            
+            if (user) {
+                // 로그인 된 상태면 버튼을 [마이페이지] [로그아웃]으로 변경
+                loginBtn.innerText = user.displayName + "님";
+                loginBtn.onclick = null; // 기존 모달 띄우기 해제
+                signupBtn.innerText = "로그아웃";
+                signupBtn.onclick = () => { signOut(auth); alert("로그아웃 되었습니다."); };
+            } else {
+                // 로그아웃 상태면 원래대로 복구
+                loginBtn.innerText = "로그인";
+                loginBtn.onclick = openModal;
+                signupBtn.innerText = "회원가입";
+                signupBtn.onclick = openModal;
+            }
+        });
+    </script>
+
+    <!-- 기존 모달 제어 스크립트 -->
+    <script>
+        const modal = document.getElementById('authModal');
+        const modalContent = document.getElementById('modalContent');
+        function openModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => { modalContent.classList.add('modal-enter-active'); }, 10);
+        }
+        function closeModal() {
+            modalContent.classList.remove('modal-enter-active');
+            modalContent.classList.add('modal-exit-active');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modalContent.classList.remove('modal-exit-active');
+            }, 200);
+        }
+    </script>
+
 </body>
 </html>
