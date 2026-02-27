@@ -317,19 +317,20 @@
     </script>
     <!-- Firebase SDK 로드 -->
     <script type="module">
-        // Firebase 핵심 기능 가져오기
+        // Firebase 핵심 기능 가져오기 (오류 수정 완료)
         import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js)";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js)";
 
         // ★ 여기에 Step 3에서 복사한 본인의 firebaseConfig 코드를 넣으세요!
         const firebaseConfig = {
+           const firebaseConfig = {
   apiKey: "AIzaSyBkJyboKHl-3TACmqjt3hsL6KByXIxOKuE",
   authDomain: "teum-app.firebaseapp.com",
   projectId: "teum-app",
   storageBucket: "teum-app.firebasestorage.app",
   messagingSenderId: "1033846224941",
   appId: "1:1033846224941:web:4f85f53573a691203460a4"
-        };
+};
 
         // Firebase 초기화
         const app = initializeApp(firebaseConfig);
@@ -362,10 +363,14 @@
                 signupBtn.onclick = () => { signOut(auth); alert("로그아웃 되었습니다."); };
             } else {
                 // 로그아웃 상태면 원래대로 복구
-                loginBtn.innerText = "로그인";
-                loginBtn.onclick = openModal;
-                signupBtn.innerText = "회원가입";
-                signupBtn.onclick = openModal;
+                if(loginBtn) {
+                    loginBtn.innerText = "로그인";
+                    loginBtn.onclick = openModal;
+                }
+                if(signupBtn) {
+                    signupBtn.innerText = "회원가입";
+                    signupBtn.onclick = openModal;
+                }
             }
         });
     </script>
@@ -387,6 +392,7 @@
             }, 200);
         }
     </script>
+
 
 </body>
 </html>
