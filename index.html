@@ -315,22 +315,20 @@
             }, 200);
         }
     </script>
-    <!-- Firebase SDK 로드 -->
+    <!-- Firebase SDK 로드 (대표님 맞춤형 완벽 코드) -->
     <script type="module">
-        // 오류 완벽 수정본: 주소에 있던 불필요한 기호 제거
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ★ 여기에 대표님의 firebaseConfig 코드를 넣으세요!
+        // 대표님의 TEUM Firebase 키값
         const firebaseConfig = {
-           const firebaseConfig = {
-  apiKey: "AIzaSyBkJyboKHl-3TACmqjt3hsL6KByXIxOKuE",
-  authDomain: "teum-app.firebaseapp.com",
-  projectId: "teum-app",
-  storageBucket: "teum-app.firebasestorage.app",
-  messagingSenderId: "1033846224941",
-  appId: "1:1033846224941:web:4f85f53573a691203460a4"
-};
+            apiKey: "AIzaSyBkJyboKHl-3TACmqjt3hsL6KByXIxOKuE",
+            authDomain: "teum-app.firebaseapp.com",
+            projectId: "teum-app",
+            storageBucket: "teum-app.firebasestorage.app",
+            messagingSenderId: "1033846224941",
+            appId: "1:1033846224941:web:4f85f53573a691203460a4"
+        };
 
         // Firebase 초기화
         const app = initializeApp(firebaseConfig);
@@ -356,10 +354,10 @@
             const signupBtn = document.getElementById('headerSignupBtn');
             
             if (user) {
-                // 로그인 된 상태면 버튼을 [마이페이지] [로그아웃]으로 변경
+                // 로그인 된 상태면 버튼을 [이름] [로그아웃]으로 변경
                 if(loginBtn) {
                     loginBtn.innerText = user.displayName + "님";
-                    loginBtn.onclick = null; // 기존 모달 띄우기 해제
+                    loginBtn.onclick = null;
                 }
                 if(signupBtn) {
                     signupBtn.innerText = "로그아웃";
@@ -378,7 +376,5 @@
             }
         });
     </script>
-
-
 </body>
 </html>
