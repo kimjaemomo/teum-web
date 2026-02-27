@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>틈(TEUM) - 우리 동네 타임 매칭 플랫폼</title>
     
+    <!-- [신규 추가] 브라우저 탭 아이콘(파비콘) 설정 -->
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,12 +32,29 @@
         body { background-color: #F4F0E6; }
         .hover-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .hover-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(51, 71, 50, 0.15); }
+        
+        /* 그래픽 요소 */
+        .bg-grid-pattern {
+            background-image: radial-gradient(#334732 1px, transparent 1px);
+            background-size: 24px 24px; opacity: 0.04;
+        }
+        .ambient-glow-1 {
+            position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(89,0,10,0.05) 0%, rgba(244,240,230,0) 70%);
+            filter: blur(60px); z-index: 0; pointer-events: none;
+        }
+        
+        /* 모달 애니메이션 */
+        .modal-enter { opacity: 0; transform: scale(0.95); transition: all 0.2s ease-out; }
+        .modal-enter-active { opacity: 1; transform: scale(1); }
+        .modal-exit { opacity: 1; transform: scale(1); transition: all 0.2s ease-in; }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); }
     </style>
 </head>
-<body class="font-sans antialiased text-[#1A261A] flex flex-col min-h-screen">
+<body class="font-sans antialiased text-[#1A261A] flex flex-col min-h-screen relative overflow-x-hidden">
 
-    <!-- Header (Simple) -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-beige/90 backdrop-blur-md border-b border-deep-forest/10">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-brand-beige/90 backdrop-blur-md border-b border-deep-forest/10">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 rounded-lg overflow-hidden shadow-sm border border-deep-forest/10 group-hover:shadow-md transition-shadow">
@@ -49,98 +70,195 @@
                     <span class="font-bold text-lg tracking-widest text-deep-forest leading-none mt-1">TEUM</span>
                 </div>
             </a>
-            <!-- GNB -->
-            <nav class="hidden md:flex gap-8 font-medium text-[15px] text-deep-forest">
-                <a href="#about" class="hover:text-deep-wine transition-colors">서비스 소개</a>
-            </nav>
+            
+            <div class="flex items-center gap-4 md:gap-8">
+                <nav class="hidden md:flex gap-8 font-medium text-[15px] text-deep-forest">
+                    <a href="#brand-story" class="hover:text-deep-wine transition-colors">틈 이야기</a>
+                    <a href="#gateway" class="hover:text-deep-wine transition-colors">서비스 시작</a>
+                </nav>
+                <button onclick="openModal()" class="text-sm md:text-[15px] font-bold text-deep-forest hover:text-deep-wine transition-colors">
+                    로그인
+                </button>
+                <button onclick="openModal()" class="bg-deep-forest text-white px-4 py-2 md:px-5 md:py-2.5 rounded-full font-bold text-[12px] md:text-[14px] hover:bg-deep-forest-hover transition-all duration-300 shadow-sm">
+                    회원가입
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow pt-32 pb-20 px-6 flex flex-col items-center justify-center">
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 px-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[70vh]">
+        <div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
+        <div class="ambient-glow-1"></div>
         
-        <!-- 1. 서비스 소개 영역 (Hero & About) -->
-        <div id="about" class="max-w-4xl mx-auto text-center mb-16 md:mb-24">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-deep-forest/20 bg-white mb-6 shadow-sm">
-                <span class="text-sm font-bold text-deep-forest">하이퍼로컬 타임 매칭 플랫폼</span>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-deep-forest/20 bg-white/80 backdrop-blur-md mb-6 shadow-sm">
+                <span class="text-sm font-bold text-deep-forest">우리 동네 하이퍼로컬 매칭 플랫폼</span>
             </div>
             
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 tracking-tight text-deep-forest break-keep">
+            <h1 class="text-4xl md:text-5xl lg:text-7xl font-black leading-tight mb-6 tracking-tight text-deep-forest break-keep">
                 우리 동네의 비어있는 시간,<br />
                 <span class="text-deep-forest/70">가장 합리적인 혜택이 되다.</span>
             </h1>
             
             <p class="text-lg md:text-xl text-deep-forest/80 mb-10 leading-relaxed font-medium break-keep px-4 md:px-0">
-                매장의 빈 시간과 갑작스러운 노쇼는 사장님에게 수익으로 돌려드리고,<br class="hidden md:block" />
-                동네 주민에게는 고가의 프리미엄 서비스를 부담 없이 누릴 수 있는 '틈'을 제공합니다.
+                동네 상점의 빈 시간과 마감 임박 상품은 사장님에게 수익으로 돌려드리고,<br class="hidden md:block" />
+                이웃 주민에게는 평소 눈여겨보던 서비스를 부담 없이 누릴 수 있는 '틈'을 제공합니다.
             </p>
+            
+            <a href="#gateway" class="inline-flex bg-deep-forest text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-deep-forest-hover transition-colors shadow-lg hover:-translate-y-1 transform">
+                서비스 시작하기 ↓
+            </a>
+        </div>
+    </section>
 
-            <!-- 3가지 핵심 가치 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 text-left">
-                <div class="bg-white/50 p-6 rounded-2xl border border-deep-forest/10">
-                    <div class="text-2xl mb-3">🕒</div>
-                    <h3 class="font-bold text-deep-forest mb-2">실시간 빈 시간 매칭</h3>
-                    <p class="text-sm text-deep-forest/70 break-keep">예약이 비어있는 애매한 평일 낮 시간이나 갑작스러운 취소 자리를 실시간으로 연결합니다.</p>
+    <!-- [신규 사진 섹션] 우리 동네 틈새 활용법 -->
+    <section class="py-16 px-6 bg-white relative z-10 border-y border-deep-forest/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="relative h-48 md:h-64 rounded-3xl overflow-hidden group shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80" alt="베이커리" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="text-xs font-bold bg-[#59000A] px-2 py-1 rounded mb-2 inline-block">F&B 마감세일</span>
+                        <h3 class="font-bold text-lg">동네 빵집 마감할인</h3>
+                    </div>
                 </div>
-                <div class="bg-white/50 p-6 rounded-2xl border border-deep-forest/10">
-                    <div class="text-2xl mb-3">🤝</div>
-                    <h3 class="font-bold text-deep-forest mb-2">프라이빗 지역 상생</h3>
-                    <p class="text-sm text-deep-forest/70 break-keep">누구나 보는 땡처리가 아닌, 우리 동네 이웃에게만 프라이빗하게 혜택을 제공하여 브랜드 가치를 지킵니다.</p>
+                <div class="relative h-48 md:h-64 rounded-3xl overflow-hidden group shadow-sm md:col-span-2">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80" alt="피트니스" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="text-xs font-bold bg-[#334732] px-2 py-1 rounded mb-2 inline-block">뷰티/피트니스</span>
+                        <h3 class="font-bold text-lg">필라테스 평일 낮 빈 시간 매칭</h3>
+                    </div>
                 </div>
-                <div class="bg-white/50 p-6 rounded-2xl border border-deep-forest/10">
-                    <div class="text-2xl mb-3">💰</div>
-                    <h3 class="font-bold text-deep-forest mb-2">합리적인 소비 경험</h3>
-                    <p class="text-sm text-deep-forest/70 break-keep">내 일정만 유연하게 맞춘다면, 평소 망설였던 프리미엄 서비스를 파격적인 가격에 경험할 수 있습니다.</p>
+                <div class="relative h-48 md:h-64 rounded-3xl overflow-hidden group shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="공간대여" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="text-xs font-bold bg-yellow-600 px-2 py-1 rounded mb-2 inline-block">공간/여가</span>
+                        <h3 class="font-bold text-lg">파티룸·연습실 공실 대여</h3>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 2. 타겟별 양갈래 게이트웨이 (Gateway) -->
+    <!-- 브랜드 스토리 & 소개 (What we do) -->
+    <section id="brand-story" class="py-24 px-6 bg-brand-beige border-b border-deep-forest/10 relative">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-deep-forest mb-8 break-keep">
+                왜 '틈(TEUM)'을 만들었을까요?
+            </h2>
+            <div class="text-left md:text-center space-y-6 text-deep-forest/80 font-medium text-lg leading-relaxed break-keep px-4">
+                <p>
+                    동네를 걷다 보면 평일 낮 시간에 유독 텅 비어있는 상점들을 보게 됩니다.<br class="hidden md:block"/>
+                    사장님들에게 갑작스러운 '노쇼(No-show)'나 '비어있는 시간'은 고스란히 손해와 한숨으로 남습니다.
+                </p>
+                <p>
+                    하지만, 그 시간이 동네 이웃들에게는 <strong>'놀라운 혜택의 순간'</strong>이 될 수 있지 않을까요?
+                </p>
+                <p class="text-deep-wine font-bold text-xl pt-4">
+                    틈(TEUM)은 이 버려지는 시간의 '틈'을 찾아냅니다.
+                </p>
+                <p>
+                    사장님은 애매하게 비어있던 시간을 가치 있는 수익과 새로운 단골 고객으로 채우고,<br class="hidden md:block"/>
+                    동네 주민은 평소 망설였던 동네의 다양한 서비스를 파격적인 특가로 경험합니다.<br/>
+                    누군가의 손해를 모두의 이익으로 바꾸는 것, 이것이 TEUM이 그리는 <strong>'건강한 동네 상생'</strong>입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 우리를 선택해야 하는 이유 (Why Us) -->
+    <section class="py-24 px-6 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-forest mb-4">왜 TEUM을 선택해야 할까요?</h2>
+                <p class="text-deep-forest/60 font-medium">수많은 플랫폼 중에서도 TEUM이 특별한 3가지 이유</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 이유 1 -->
+                <div class="bg-brand-beige/50 p-8 rounded-[32px] shadow-sm border border-deep-forest/5 hover:-translate-y-2 transition-transform">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">✨</div>
+                    <h3 class="font-bold text-xl text-deep-forest mb-3">검증된 동네 단골 매장</h3>
+                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">
+                        단순히 저렴한 물건을 파는 것이 아닙니다. 우리 동네에서 믿고 갈 수 있는 미용실, 필라테스, 빵집 등 검증된 상점들의 확실한 서비스만을 제공합니다.
+                    </p>
+                </div>
+                <!-- 이유 2 -->
+                <div class="bg-brand-beige/50 p-8 rounded-[32px] shadow-sm border border-deep-forest/5 hover:-translate-y-2 transition-transform">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">🔒</div>
+                    <h3 class="font-bold text-xl text-deep-forest mb-3">프라이빗 로컬 혜택</h3>
+                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">
+                        불특정 다수에게 전국구로 노출되는 앱이 아닙니다. 사장님이 원하는 시간에만 열리며, 걸어서 방문할 수 있는 가장 가까운 '진짜 동네 이웃'과만 프라이빗하게 매칭됩니다.
+                    </p>
+                </div>
+                <!-- 이유 3 -->
+                <div class="bg-brand-beige/50 p-8 rounded-[32px] shadow-sm border border-deep-forest/5 hover:-translate-y-2 transition-transform">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">🤝</div>
+                    <h3 class="font-bold text-xl text-deep-forest mb-3">확실한 노쇼(No-show) 방어</h3>
+                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">
+                        예약하고 나타나지 않는 고객 때문에 지치셨나요? 틈(TEUM)은 자체적인 '예약금 제도'와 강력한 '페널티 시스템'을 통해 사장님과 이웃 간의 약속이 반드시 지켜지도록 보호합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 타겟별 양갈래 게이트웨이 (Gateway) -->
+    <section id="gateway" class="py-24 px-6 bg-brand-beige border-y border-deep-forest/10">
         <div class="w-full max-w-5xl mx-auto">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-deep-forest mb-10">어떤 서비스를 원하시나요?</h2>
+            <div class="text-center mb-16">
+                <span class="bg-[#FFD54F] text-deep-forest px-4 py-1.5 rounded-full text-sm font-bold mb-4 inline-block">지금 바로 시작하세요</span>
+                <h2 class="text-3xl md:text-4xl font-black text-deep-forest">어떤 목적으로 방문하셨나요?</h2>
+            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-                
-                <!-- 경로 A: 동네 주민 (소비자) -->
-                <a href="consumer.html" class="hover-card bg-white rounded-[32px] p-8 md:p-12 border border-deep-forest/10 flex flex-col items-center text-center group relative overflow-hidden">
+                <!-- 소비자 -->
+                <a href="consumer.html" class="hover-card bg-white rounded-[40px] p-8 md:p-12 border border-deep-forest/10 flex flex-col items-center text-center group relative overflow-hidden shadow-sm">
                     <div class="absolute top-0 left-0 w-full h-2 bg-deep-forest transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                    
-                    <div class="w-20 h-20 bg-brand-beige rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        🌿
-                    </div>
-                    
-                    <h3 class="text-2xl font-black text-deep-forest mb-4">동네 주민이신가요?</h3>
-                    <p class="text-deep-forest/70 mb-8 font-medium leading-relaxed break-keep">
-                        필라테스, 미용실, 공간 대여 등<br />우리 동네 프리미엄 서비스의<br />파격적인 타임 특가를 누려보세요.
-                    </p>
-                    
-                    <div class="mt-auto bg-deep-forest text-white px-8 py-4 rounded-full font-bold w-full md:w-auto group-hover:bg-deep-forest-hover transition-colors">
-                        진행 중인 틈새 혜택 보기 ➔
-                    </div>
+                    <div class="w-24 h-24 bg-brand-beige rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-sm group-hover:scale-110 transition-transform">🌿</div>
+                    <h3 class="text-2xl md:text-3xl font-black text-deep-forest mb-4">동네 주민이신가요?</h3>
+                    <p class="text-deep-forest/70 mb-10 font-medium leading-relaxed break-keep text-lg">맛집 마감 할인부터 공간 대여까지<br />우리 동네 상점들의 다양한 혜택을<br />파격적인 특가로 누려보세요.</p>
+                    <div class="mt-auto bg-deep-forest text-white px-8 py-4 rounded-full font-bold w-full md:w-auto group-hover:bg-deep-forest-hover transition-colors text-lg">진행 중인 틈새 혜택 보기 ➔</div>
                 </a>
 
-                <!-- 경로 B: 매장 사장님 (파트너) -->
-                <a href="partner.html" class="hover-card bg-deep-forest rounded-[32px] p-8 md:p-12 flex flex-col items-center text-center group relative overflow-hidden">
+                <!-- 사장님 -->
+                <a href="partner.html" class="hover-card bg-deep-forest rounded-[40px] p-8 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-xl">
                     <div class="absolute top-0 left-0 w-full h-2 bg-deep-wine transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                    
-                    <div class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        🏪
-                    </div>
-                    
-                    <h3 class="text-2xl font-black text-brand-beige mb-4">매장을 운영 중이신가요?</h3>
-                    <p class="text-brand-beige/70 mb-8 font-medium leading-relaxed break-keep">
-                        월세만 나가던 애매한 낮 시간과<br />갑작스러운 노쇼 빈자리를<br />안정적인 추가 수익으로 바꿔보세요.
-                    </p>
-                    
-                    <div class="mt-auto bg-white text-deep-forest px-8 py-4 rounded-full font-bold w-full md:w-auto group-hover:bg-brand-beige transition-colors shadow-lg">
-                        사장님 수수료 0% 입점하기 ➔
-                    </div>
+                    <div class="w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center text-5xl mb-6 shadow-inner group-hover:scale-110 transition-transform">🏪</div>
+                    <h3 class="text-2xl md:text-3xl font-black text-brand-beige mb-4">매장을 운영 중이신가요?</h3>
+                    <p class="text-brand-beige/70 mb-10 font-medium leading-relaxed break-keep text-lg">월세만 나가던 애매한 낮 시간과<br />갑작스러운 노쇼 빈자리, 폐기 임박 재고를<br />안정적인 추가 수익으로 바꿔보세요.</p>
+                    <div class="mt-auto bg-brand-beige text-deep-forest px-8 py-4 rounded-full font-bold w-full md:w-auto hover:bg-white transition-colors text-lg">사장님 혜택 알아보기 ➔</div>
                 </a>
-
             </div>
         </div>
+    </section>
 
-    </main>
+    <!-- 오픈채팅방 -> 카카오톡 플러스친구 연결 배너 (Community CTA) -->
+    <section class="py-16 px-6 bg-white relative overflow-hidden">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between bg-brand-beige rounded-[32px] p-8 md:p-10 shadow-sm border border-deep-forest/5">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-3">
+                    <div class="w-10 h-10 bg-[#FEE500] rounded-xl flex items-center justify-center shadow-sm">
+                        <svg class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5.523 0-10 3.52-10 7.864 0 2.768 1.83 5.232 4.606 6.64-.265 1.053-1.002 3.666-1.026 3.79-.033.167.054.267.158.267.085 0 .153-.023.235-.08 0 0 3.328-2.316 4.744-3.32.42.062.85.093 1.283.093 5.523 0 10-3.52 10-7.864C22 6.52 17.523 3 12 3z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-deep-forest">TEUM에 궁금한 점이 있으신가요?</h3>
+                </div>
+                <p class="text-deep-forest/70 font-medium break-keep">
+                    입점 문의부터 고객 지원, 새로운 동네 특가 알림까지!<br class="hidden md:block"/>
+                    틈(TEUM) 공식 카카오톡 채널을 추가하시고 가장 빠르게 소통하세요.
+                </p>
+            </div>
+            
+            <!-- [여기에 대표님의 카카오톡 채널(플러스친구) 링크를 넣으세요] -->
+            <a href="https://pf.kakao.com/_UCCqX/friend" target="_blank" class="bg-[#FEE500] text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-[#FDD800] transition-colors shadow-md whitespace-nowrap w-full md:w-auto text-center flex items-center justify-center gap-2">
+                카카오톡 채널 추가하기 💬
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-brand-beige py-12 px-6 border-t border-deep-forest/10 mt-auto">
@@ -148,11 +266,53 @@
             <div class="flex items-center justify-center gap-2 opacity-80">
                 <span class="font-bold text-base tracking-widest text-deep-forest mt-0.5">TEUM</span>
             </div>
-            <p class="text-sm text-deep-forest/60 font-medium break-keep">
-                2026 정부 창업지원사업(RiSE) 선정 파일럿 프로젝트 진행 중
-            </p>
+            <p class="text-sm text-deep-forest/60 font-medium break-keep">2026 정부 창업지원사업(RiSE) 선정 파일럿 프로젝트 진행 중</p>
             <p class="text-xs text-deep-forest/40">&copy; 2026 TEUM. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- 회원가입/로그인 모달 (팝업창) -->
+    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div id="modalContent" class="bg-white rounded-[32px] p-8 md:p-10 w-[90%] max-w-md relative z-10 shadow-2xl modal-enter">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-deep-forest transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center mb-8 pt-4">
+                <div class="w-16 h-16 bg-brand-beige rounded-2xl mx-auto flex items-center justify-center mb-4">
+                    <span class="text-2xl font-black text-deep-forest">TEUM</span>
+                </div>
+                <h2 class="text-2xl font-bold text-deep-forest mb-2">틈 회원가입/로그인</h2>
+                <p class="text-sm text-deep-forest/60 font-medium break-keep">3초 만에 가입하고 우리 동네 틈새 특가를<br>가장 먼저 알림 받아보세요!</p>
+            </div>
+            <div class="space-y-3">
+                <a href="https://tally.so/r/xXdV1E" target="_blank" class="flex items-center justify-center gap-3 w-full bg-[#FEE500] text-[#000000] rounded-xl py-4 font-bold hover:bg-[#FDD800] transition-colors shadow-sm">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5.523 0-10 3.52-10 7.864 0 2.768 1.83 5.232 4.606 6.64-.265 1.053-1.002 3.666-1.026 3.79-.033.167.054.267.158.267.085 0 .153-.023.235-.08 0 0 3.328-2.316 4.744-3.32.42.062.85.093 1.283.093 5.523 0 10-3.52 10-7.864C22 6.52 17.523 3 12 3z"/></svg>
+                    카카오로 3초 만에 시작하기
+                </a>
+                <button onclick="alert('준비 중인 기능입니다. 카카오로 시작해주세요!')" class="flex items-center justify-center gap-3 w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-4 font-bold hover:bg-gray-50 transition-colors shadow-sm">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Google로 시작하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('authModal');
+        const modalContent = document.getElementById('modalContent');
+        function openModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => { modalContent.classList.add('modal-enter-active'); }, 10);
+        }
+        function closeModal() {
+            modalContent.classList.remove('modal-enter-active');
+            modalContent.classList.add('modal-exit-active');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modalContent.classList.remove('modal-exit-active');
+            }, 200);
+        }
+    </script>
 </body>
 </html>
