@@ -1,791 +1,534 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리 동네 틈새 특가 - TEUM</title>
-    
-    <!-- 파비콘 설정 -->
-    <link rel="icon" href="logo.jpg" type="image/jpeg">
-    <link rel="apple-touch-icon" href="logo.jpg"><!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사장님 입점 안내 - TEUM</title>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'deep-forest': '#334732',
-                        'deep-forest-hover': '#243323',
-                        'brand-beige': '#F4F0E6',
-                        'brand-ivory': '#FFFFF0',
-                        'deep-wine': '#59000A',
-                    },
-                    fontFamily: { sans: ['Pretendard', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #FFFFFF; }
-        ::-webkit-scrollbar-thumb { background: #334732; border-radius: 10px; }
-        body { padding-bottom: 90px; } 
-        details > summary { list-style: none; }
-        details > summary::-webkit-details-marker { display: none; }
-        .bg-grid-pattern-dark {
-            background-image: radial-gradient(rgba(244,240,230,0.1) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>파트너 입점 안내 — 틈(TEUM) 사장님 페이지</title>
+  <meta name="description" content="마곡·가양 미용실·네일샵·피부관리실 사장님, 평일 낮 공실을 수익으로 바꿔드립니다. 수수료 무료.">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="font-sans antialiased text-[#1A261A] bg-white relative min-h-screen">
+<body>
 
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-deep-forest/10">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-lg overflow-hidden shadow-sm border border-deep-forest/10 group-hover:shadow-md transition-shadow">
-                    <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="100" height="100" fill="#F4F0E6" />
-                        <rect x="0" y="0" width="45" height="100" fill="#334732" />
-                        <rect x="55" y="0" width="45" height="100" fill="#334732" />
-                        <circle cx="45" cy="45" r="3" fill="#F4F0E6" />
-                        <circle cx="55" cy="55" r="6" fill="#FFD54F" />
-                    </svg>
-                </div>
-                <div class="flex flex-col justify-center">
-                    <span class="font-bold text-lg tracking-widest text-deep-forest leading-none mt-1">TEUM</span>
-                    <span class="text-[10px] text-deep-forest/60 font-bold">FOR PARTNERS</span>
-                </div>
-            </a>
-            
-            <div class="flex items-center gap-3 md:gap-8">
-                <nav class="hidden md:flex gap-8 font-medium text-[15px] text-deep-forest">
-                    <a href="#process" class="hover:text-deep-wine transition-colors">이용 방법</a>
-                    <a href="#benefits" class="hover:text-deep-wine transition-colors">입점 혜택</a>
-                    <a href="#faq" class="hover:text-deep-wine transition-colors">자주 묻는 질문</a>
-                </nav>
-                <a href="consumer.html" class="text-brand-beige bg-deep-forest border border-deep-forest px-3 py-1.5 md:px-5 md:py-2.5 rounded-full font-bold text-[11px] md:text-[14px] hover:bg-deep-forest-hover transition-all duration-300 whitespace-nowrap">
-                    동네 혜택 구경하기
-                </a>
-            </div>
+  <!-- 네비게이션 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="틈 TEUM" height="36">
+      </a>
+      <div class="nav-links">
+        <a href="consumer.html" class="nav-link">동네 혜택 보기</a>
+        <a href="partner.html" class="nav-link" style="color:var(--color-forest);">사장님 입점</a>
+        <button id="nav-login-btn" class="btn btn-primary btn-sm" data-action="login">로그인</button>
+        <div id="nav-user-area" class="hidden d-flex align-center gap-8">
+          <span id="nav-user-name" class="nav-link"></span>
+          <a href="dashboard.html" class="btn btn-secondary btn-sm">마이페이지</a>
+          <button class="nav-link" data-action="logout">로그아웃</button>
         </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="pt-36 pb-24 px-6 relative overflow-hidden bg-deep-forest text-brand-beige">
-        <div class="absolute inset-0 bg-grid-pattern-dark pointer-events-none"></div>
-        <div class="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center">
-            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-yellow-400/50 bg-yellow-400/20 mb-6 backdrop-blur-sm shadow-sm">
-                <span class="text-sm font-bold text-yellow-300">🔥 마곡/발산 지역 선착순 10곳 평생 수수료 0원 (현재 2자리 남음)</span>
-            </div>
-            
-            <h1 class="text-4xl md:text-5xl lg:text-7xl font-black leading-tight mb-6 tracking-tight text-white break-keep">
-                월세는 똑같이 나가는데,<br />
-                <span class="text-brand-beige">오후 2시는 왜 비어있을까요?</span>
-            </h1>
-            <p class="text-lg md:text-xl text-brand-beige/80 mb-12 leading-relaxed font-medium break-keep px-4">
-                갑작스러운 예약 취소(노쇼)와 텅 빈 평일 낮 시간.<br class="hidden md:block" />
-                '틈'에 올려만 두시면 가장 가까운 동네 주민을 충성 단골로 연결해 드립니다.
-            </p>
-            <a href="https://tally.so/r/xXdV1E" target="_blank" class="bg-[#FFD54F] text-deep-forest px-10 py-5 rounded-full font-black text-lg hover:bg-yellow-300 transition-all duration-300 shadow-[0_10px_30px_rgba(255,213,79,0.3)] hover:-translate-y-1 transform">
-                무료 입점 상담 신청하기 (1분)
-            </a>
-        </div>
-    </section>
-
-    <!-- Pain Points (공감 유도) -->
-    <section id="painpoints" class="py-24 px-6 bg-brand-beige border-b border-deep-forest/10">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-deep-forest break-keep">원장님, 혹시 이런 고민 하고 계신가요?</h2>
-                <p class="text-deep-forest/60 font-medium">프리미엄 샵을 운영하는 사장님들의 공통된 스트레스입니다.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-8 rounded-[24px] shadow-sm border border-deep-forest/5 hover:-translate-y-1 transition-transform">
-                    <div class="text-3xl mb-4">🧘‍♀️</div>
-                    <h3 class="font-bold text-lg mb-2 text-deep-forest">필라테스 원장님 A</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">"강사님 시급은 그대로 나가는데 평일 낮 2시~4시는 문의조차 없어요. 당일 노쇼라도 나면 정말 허탈합니다."</p>
-                </div>
-                <div class="bg-white p-8 rounded-[24px] shadow-sm border border-deep-forest/5 hover:-translate-y-1 transition-transform">
-                    <div class="text-3xl mb-4">✂️</div>
-                    <h3 class="font-bold text-lg mb-2 text-deep-forest">미용실 수석 디자이너 B</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">"저녁이랑 주말은 풀예약인데 낮 시간은 텅 비어요. 동네 전단지를 돌려도 효과가 없고, 싼 티 나는 할인은 하기 싫어요."</p>
-                </div>
-                <div class="bg-white p-8 rounded-[24px] shadow-sm border border-deep-forest/5 hover:-translate-y-1 transition-transform">
-                    <div class="text-3xl mb-4">⛳</div>
-                    <h3 class="font-bold text-lg mb-2 text-deep-forest">골프 스튜디오 대표 C</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">"최고급 트랙맨 장비를 깔아놨는데 평일 낮은 타석이 놉니다. 우리 시설의 가치를 알아줄 진짜 동네 주민을 찾고 싶어요."</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- [강조] 불안 해소 (Solution) -->
-    <section class="py-24 px-6 bg-white border-b border-deep-forest/10">
-        <div class="max-w-5xl mx-auto">
-            <div class="bg-deep-forest text-brand-beige rounded-[40px] p-10 md:p-16 relative overflow-hidden shadow-2xl">
-                <div class="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
-                
-                <div class="relative z-10 md:w-3/4">
-                    <div class="inline-flex bg-[#FFD54F] text-deep-forest px-3 py-1 rounded-md text-xs font-bold mb-6">가장 많이 묻는 질문 1위</div>
-                    <h2 class="text-3xl md:text-4xl font-black mb-6 leading-tight break-keep">"할인하는 거 기존 회원들이 알면 기분 나빠하지 않을까요?"</h2>
-                    <p class="text-lg text-brand-beige/90 mb-8 leading-relaxed break-keep">
-                        걱정하지 마세요. 틈(TEUM)은 누구나 보는 공개 땡처리 앱이 아닙니다.<br><br>
-                        원장님이 **'원하는 특정 시간'**에만 비밀리에 매칭되며, 일반 포털(네이버 등)에는 노출되지 않는 **프라이빗 타임 매칭 시스템**으로 원장님 브랜드의 고급스러운 가치를 100% 지켜드립니다.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- [신규 추가] 노쇼 방지 솔루션 (틈 트리) -->
-    <section id="noshow-defense" class="py-24 px-6 bg-brand-beige border-b border-deep-forest/10">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/2">
-                <div class="inline-flex bg-deep-wine text-white px-3 py-1 rounded-md text-xs font-bold mb-4">완벽한 노쇼(No-show) 방어</div>
-                <h2 class="text-3xl md:text-4xl font-black text-deep-forest mb-6 leading-tight break-keep">
-                    예약해놓고 안 오면 어쩌죠?<br>
-                    <span class="text-deep-wine">100% 차단 시스템이 있습니다.</span>
-                </h2>
-                <p class="text-deep-forest/70 text-lg leading-relaxed mb-6 font-medium break-keep">
-                    틈(TEUM)은 고객이 약속을 지킬 때마다 나무가 자라는 <strong>'틈 트리(TEUM Tree) 명예 시스템'</strong>을 도입했습니다. 고객의 나무 레벨은 원장님께 예약 시 그대로 노출됩니다.
-                </p>
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-start gap-3">
-                        <div class="text-xl">🌳</div>
-                        <div>
-                            <strong class="text-deep-forest block">안심할 수 있는 '명예 뱃지' 확인</strong>
-                            <span class="text-sm text-deep-forest/70">예약 신청이 들어올 때 "누적 방문 10회(VIP 나무)" 등의 등급을 미리 확인하고 예약을 수락할 수 있습니다.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="text-xl">☠️</div>
-                        <div>
-                            <strong class="text-deep-forest block">강력한 심리적 페널티 (손실 회피)</strong>
-                            <span class="text-sm text-deep-forest/70">무단 노쇼 시, 고객이 애써 키운 나무 등급과 혜택이 즉시 초기화(사망)되므로 스스로 약속을 지키게 만듭니다.</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- 시각적 UI 표현 박스 -->
-            <div class="md:w-1/2 bg-white p-8 rounded-[40px] shadow-xl border border-deep-forest/5 w-full relative">
-                <div class="absolute -top-4 right-8 bg-[#FFD54F] text-deep-forest text-xs font-bold px-3 py-1 rounded-full shadow-md">원장님 알림톡 화면 예시</div>
-                <div class="border-b border-gray-100 pb-4 mb-4">
-                    <div class="text-sm text-gray-500 mb-1">새로운 틈 예약 신청</div>
-                    <div class="font-bold text-lg text-deep-forest">김*지 고객님 (오후 2시 방문)</div>
-                </div>
-                <div class="bg-brand-beige/50 rounded-2xl p-5 flex items-center justify-between mb-4">
-                    <div>
-                        <div class="text-xs text-deep-forest/60 font-bold mb-1">고객 매너 등급</div>
-                        <div class="font-black text-deep-forest text-lg flex items-center gap-2">
-                            🌳 Lv.3 틈새 숲의 수호자
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-deep-forest/60 font-bold mb-1">노쇼 이력</div>
-                        <div class="font-bold text-blue-600">0건 (안심 이웃)</div>
-                    </div>
-                </div>
-                <button class="w-full bg-deep-forest text-white py-4 rounded-xl font-bold hover:bg-deep-forest-hover transition-colors">예약 수락하기</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- [수정] 이용 프로세스 (극강의 편리함 강조) - 배경색 white로 변경 -->
-    <section id="process" class="py-24 px-6 bg-white">
-        <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4 text-deep-forest">복잡한 앱 관리? 전혀 필요 없습니다.</h2>
-            <p class="text-deep-forest/60 font-medium mb-16 break-keep">원장님은 본업에만 집중하세요. 나머지는 틈(TEUM)이 다 알아서 합니다.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                <div class="hidden md:block absolute top-1/2 left-1/6 right-1/6 h-0.5 bg-deep-forest/10 z-0 -translate-y-1/2"></div>
-                
-                <div class="relative z-10 bg-white p-10 rounded-[32px] shadow-sm border border-deep-forest/5 flex flex-col items-center">
-                    <div class="w-16 h-16 bg-brand-beige rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">📝</div>
-                    <h3 class="font-bold text-xl mb-3 text-deep-forest">1. 1분 입점 신청</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">복잡한 서류 없이, 하단 버튼을 눌러 매장 정보만 툭 남겨주시면 전담 매니저가 세팅해 드립니다.</p>
-                </div>
-
-                <div class="relative z-10 bg-white p-10 rounded-[32px] shadow-sm border border-deep-forest/5 flex flex-col items-center">
-                    <div class="w-16 h-16 bg-brand-beige rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">💬</div>
-                    <h3 class="font-bold text-xl mb-3 text-deep-forest">2. 빈 시간 카톡 전송</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed break-keep">"내일 오후 2시 예약 비었어요~" 라고 틈(TEUM) 카카오톡으로 보내주시면 플랫폼에 즉시 반영됩니다.</p>
-                </div>
-
-                <div class="relative z-10 bg-deep-forest text-white p-10 rounded-[32px] shadow-lg flex flex-col items-center transform md:-translate-y-4">
-                    <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">💰</div>
-                    <h3 class="font-bold text-xl mb-3 text-brand-beige">3. 방문 및 즉시 정산</h3>
-                    <p class="text-brand-beige/80 text-sm leading-relaxed break-keep">매칭된 고객이 예약 시간에 방문하면, 현장에서 바로 카드로 결제받으시면 됩니다. (플랫폼 정산 대기 0일)</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- [신규] 사장님 전용 FAQ (의심 제거) -->
-    <section id="faq" class="py-24 px-6 bg-white border-t border-deep-forest/10">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold mb-10 text-center text-deep-forest">입점 전, 가장 많이 묻는 질문</h2>
-            
-            <div class="space-y-4">
-                <details class="bg-brand-beige/30 rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer" open>
-                    <summary class="font-bold text-lg px-8 py-6 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 예약해 놓고 안 오면(노쇼) 어떡하나요?
-                        <span class="text-2xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-8 pb-6 text-deep-forest/80 text-base leading-relaxed border-t border-deep-forest/10 pt-4 mt-2 break-keep">
-                        A. 원장님의 귀한 시간을 지키기 위해 <strong>'노쇼 방지 예약금(보증금) 제도'</strong>를 운영 중입니다. 고객은 예약 시 1만 원을 선입금해야 확정되며, 노쇼 시 이 금액은 원장님께 100% 지급되고 해당 고객은 플랫폼에서 영구 퇴출됩니다.
-                    </div>
-                </details>
-
-                <details class="bg-brand-beige/30 rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer">
-                    <summary class="font-bold text-lg px-8 py-6 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 진짜로 가입비나 수수료가 없나요?
-                        <span class="text-2xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-8 pb-6 text-deep-forest/80 text-base leading-relaxed border-t border-deep-forest/10 pt-4 mt-2 break-keep">
-                        A. 네, 맞습니다! 현재 서비스 런칭 기념으로 <strong>선착순 10개 매장에 한해 '평생 가입비 무료 + 매칭 수수료 0원'</strong> 프로모션을 진행하고 있습니다. 초기 파트너사에게는 추가 비용이 절대 발생하지 않습니다.
-                    </div>
-                </details>
-
-                <details class="bg-brand-beige/30 rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer">
-                    <summary class="font-bold text-lg px-8 py-6 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 결제 대금 정산은 언제 되나요?
-                        <span class="text-2xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-8 pb-6 text-deep-forest/80 text-base leading-relaxed border-t border-deep-forest/10 pt-4 mt-2 break-keep">
-                        A. 틈(TEUM)은 플랫폼에 돈을 묶어두지 않습니다. 고객이 매장에 방문하여 서비스 이용을 마친 후, <strong>매장 포스기(POS)에서 직접 결제</strong>를 받으시면 됩니다. 정산 대기일은 0일입니다.
-                    </div>
-                </details>
-                
-                <details class="bg-brand-beige/30 rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer">
-                    <summary class="font-bold text-lg px-8 py-6 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 계약 기간이 있나요? 중간에 해지 가능한가요?
-                        <span class="text-2xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-8 pb-6 text-deep-forest/80 text-base leading-relaxed border-t border-deep-forest/10 pt-4 mt-2 break-keep">
-                        A. 의무 계약 기간이나 위약금은 전혀 없습니다. 서비스 이용 중 빈 시간이 발생하지 않거나 조건이 맞지 않으시면 언제든 카카오톡으로 중단(비활성화) 요청을 하시면 됩니다. 
-                    </div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- [신규] 최종 결제 유도 섹션 (Final CTA) -->
-    <section class="py-24 px-6 bg-deep-forest text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        <div class="max-w-3xl mx-auto relative z-10 flex flex-col items-center">
-            <span class="bg-[#FFD54F] text-deep-forest px-4 py-1.5 rounded-full text-sm font-bold mb-6">초기 입점 프로모션 마감 임박</span>
-            <h2 class="text-3xl md:text-5xl font-black text-brand-beige mb-6 break-keep leading-tight">
-                지금 놓치면 평생 수수료 0원 혜택이<br class="hidden md:block"/> 사라집니다.
-            </h2>
-            <p class="text-brand-beige/80 text-lg mb-10 font-medium break-keep">
-                잃을 것은 없고, 채워질 빈 시간만 남았습니다.<br>지금 바로 1분 만에 입점 상담을 남겨주세요.
-            </p>
-            <a href="https://tally.so/r/xXdV1E" target="_blank" class="inline-block bg-brand-beige text-deep-forest px-12 py-5 rounded-full font-black text-xl hover:bg-white transition-all duration-300 shadow-xl hover:-translate-y-1 transform">
-                👉 무료 입점 1분 만에 끝내기
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white py-12 px-6 pb-32">
-        <div class="max-w-6xl mx-auto text-center flex flex-col items-center gap-6">
-            <div class="flex items-center justify-center gap-2 opacity-80">
-                <span class="font-bold text-base tracking-widest text-deep-forest mt-0.5">TEUM</span>
-            </div>
-            <p class="text-xs text-deep-forest/40">&copy; 2026 TEUM. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- 모바일/PC 하단 고정 입점 신청 버튼 (Sticky CTA) -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-md border-t border-deep-forest/20 z-50 flex justify-center shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
-        <div class="w-full max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div class="text-center sm:text-left text-deep-forest w-full sm:w-auto">
-                <div class="text-xs text-deep-wine font-bold mb-0.5 animate-pulse">🔥 마곡/발산 선착순 10곳 이벤트 (현재 2자리 남음)</div>
-                <div class="text-sm font-bold">가입비, 위약금, 마케팅비 전액 0원</div>
-            </div>
-            <a href="https://tally.so/r/xXdV1E" target="_blank" class="w-full sm:w-auto text-center bg-deep-forest text-brand-beige px-8 py-3.5 rounded-xl font-bold text-base hover:bg-deep-forest-hover transition-colors shadow-lg">
-                1분 만에 무료 입점 상담하기
-            </a>
-        </div>
+      </div>
+      <button class="nav-hamburger" id="hamburger-btn" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-
-</body>
-</html>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'deep-forest': '#334732',
-                        'deep-forest-hover': '#243323',
-                        'brand-beige': '#F4F0E6',
-                        'brand-ivory': '#FFFFF0',
-                        'deep-wine': '#59000A',
-                    },
-                    fontFamily: { sans: ['Pretendard', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        html { scroll-behavior: smooth; }
-        body { padding-bottom: 80px; background-color: #F4F0E6; } 
-        /* 스크롤바 숨기기 */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* 메인 스크롤바 */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #F4F0E6; }
-        ::-webkit-scrollbar-thumb { background: #334732; border-radius: 10px; }
-        
-        .bg-grid-pattern {
-            background-image: radial-gradient(#334732 1px, transparent 1px);
-            background-size: 24px 24px; opacity: 0.04;
-        }
-        .ambient-glow-1 {
-            position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw;
-            background: radial-gradient(circle, rgba(89,0,10,0.05) 0%, rgba(244,240,230,0) 70%);
-            filter: blur(60px); z-index: 0; pointer-events: none;
-        }
-        
-        details > summary { list-style: none; }
-        details > summary::-webkit-details-marker { display: none; }
-    </style>
-</head>
-<body class="font-sans antialiased text-[#1A261A] relative min-h-screen overflow-x-hidden">
-
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#F4F0E6]/80 backdrop-blur-lg border-b border-deep-forest/10">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-lg overflow-hidden shadow-sm border border-deep-forest/10 group-hover:shadow-md transition-shadow bg-white flex items-center justify-center">
-                    <span class="text-xl font-black text-deep-forest">T</span>
-                </div>
-                <div class="flex flex-col justify-center">
-                    <span class="font-bold text-lg tracking-widest text-deep-forest leading-none mt-1">TEUM</span>
-                </div>
-            </a>
-            
-            <div class="flex items-center gap-3 md:gap-8 relative z-10">
-                <nav class="hidden md:flex gap-8 font-medium text-[15px] text-deep-forest">
-                    <a href="#why-teum" class="hover:text-deep-wine transition-colors">틈 이야기</a>
-                    <a href="#deals" class="hover:text-deep-wine transition-colors">진행중인 혜택</a>
-                    <a href="#reviews" class="hover:text-deep-wine transition-colors">이웃 후기</a>
-                </nav>
-                <a href="partner.html" class="text-deep-forest border border-deep-forest px-3 py-1.5 md:px-5 md:py-2.5 rounded-full font-bold text-[11px] md:text-[14px] hover:bg-deep-forest hover:text-white transition-all duration-300 whitespace-nowrap bg-white/50">
-                    사장님 입점
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="pt-36 pb-20 px-6 relative overflow-hidden bg-brand-beige">
-        <div class="absolute inset-0 bg-grid-pattern pointer-events-none"></div>
-        <div class="ambient-glow-1"></div>
-
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-deep-wine/20 bg-white/80 backdrop-blur-sm mb-8 shadow-sm">
-                <span class="text-sm font-bold text-deep-wine">🔥 신규 가입 시 5,000원 웰컴 쿠폰 증정</span>
-            </div>
-            <h1 class="text-4xl md:text-5xl lg:text-7xl font-black leading-tight mb-6 tracking-tight text-deep-forest break-keep">
-                오후에 비어있는 '틈',<br />
-                <span class="text-deep-forest/70">완벽한 혜택으로 채우다</span>
-            </h1>
-            <p class="text-lg md:text-xl text-deep-forest/80 mb-10 leading-relaxed font-medium break-keep px-4 md:px-0">
-                평일 낮, 고가의 필라테스부터 빵집 마감 할인까지.<br class="hidden md:block" />
-                동네 단골 매장의 빈 시간을 이웃에게만 합리적으로 연결합니다.
-            </p>
-        </div>
-    </section>
-
-    <!-- 공감 & 설득 스토리텔링 섹션 (Why TEUM?) -->
-    <section id="why-teum" class="py-20 px-6 bg-white border-t border-deep-forest/10 relative overflow-hidden">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="text-4xl mb-4">🤔</div>
-            <h2 class="text-2xl md:text-3xl font-bold text-deep-forest mb-6 leading-tight break-keep">
-                "이렇게 싼데, 혹시 대충 해주는 거 아니야?"<br />
-                <span class="text-deep-wine mt-2 inline-block">아닙니다. 정규 서비스와 100% 동일합니다.</span>
-            </h2>
-            
-            <div class="bg-brand-beige/40 p-8 md:p-10 rounded-[32px] text-left md:text-center shadow-inner border border-deep-forest/5 mt-8">
-                <p class="text-deep-forest/80 leading-relaxed font-medium mb-6 text-base md:text-lg break-keep">
-                    매장을 운영하다 보면 갑작스러운 '노쇼'나 애매하게 '비어있는 시간'이 생기기 마련입니다.<br class="hidden md:block"/>
-                    틈(TEUM)은 이 소중한 여유 시간을 <strong>가장 가까운 동네 이웃들에게만 '프라이빗 특가'로 연결</strong>해 드립니다.
-                </p>
-                <p class="text-deep-forest/80 leading-relaxed font-medium text-base md:text-lg break-keep">
-                    단순한 땡처리가 아닙니다. 사장님은 빈 시간을 새로운 단골과의 만남으로 채우고,<br class="hidden md:block"/>
-                    이웃님들은 평소 가고 싶었던 동네 상점을 가벼운 마음으로 경험하는 <strong>건강한 동네 상생</strong>입니다.<br/>
-                </p>
-                <div class="mt-8 pt-6 border-t border-deep-forest/10 inline-block w-full text-center">
-                    <span class="text-deep-forest font-bold text-lg md:text-xl">"사장님의 시간은 가치 있게, 이웃님의 일상은 혜택으로 채웁니다."</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ★ [업데이트] 대표님 수정사항 100% 반영된 상품 카드 섹션 ★ -->
-    <section id="deals" class="pt-20 pb-24 px-6 bg-[#F4F0E6] relative border-t border-deep-forest/10">
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold text-deep-forest mb-4">현재 진행 중인 틈새 혜택</h2>
-                <p class="text-deep-forest/60 font-medium">우리 동네에 지금 막 열린 타임 특가입니다.</p>
-            </div>
-
-            <!-- 카테고리 탭 -->
-            <div class="flex overflow-x-auto gap-3 pb-8 mb-4 hide-scrollbar justify-start md:justify-center px-2">
-                <button class="px-6 py-2.5 bg-[#334732] text-white rounded-full text-sm font-bold whitespace-nowrap shadow-md">🔥 전체</button>
-                <button class="px-6 py-2.5 bg-white border border-gray-200 text-[#334732] rounded-full text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-colors">🧘‍♀️ 피트니스/요가</button>
-                <button class="px-6 py-2.5 bg-white border border-gray-200 text-[#334732] rounded-full text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-colors">⛳ 골프/스포츠</button>
-                <button class="px-6 py-2.5 bg-white border border-gray-200 text-[#334732] rounded-full text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-colors">✂️ 헤어/뷰티</button>
-                <button class="px-6 py-2.5 bg-white border border-gray-200 text-[#334732] rounded-full text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-colors">🍵 파티룸/공간대여</button>
-            </div>
-
-            <!-- 상품 카드 그리드 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- 카드 1: 플리스 골프 -->
-                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative">
-                    <div class="h-56 bg-gray-100 rounded-[20px] mb-5 overflow-hidden relative border border-gray-100">
-                        <img src="https://images.unsplash.com/photo-1592919505780-303950717480?auto=format&fit=crop&w=800&q=80" alt="골프 스튜디오" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex flex-col flex-grow px-1">
-                        <!-- 위치 태그 & 상호명 -->
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-[#F4F0E6] text-gray-700 text-[11px] font-bold px-2.5 py-1 rounded-md">📍 야탑역 도보 5분</span>
-                            <span class="text-xs font-bold text-gray-400">분당 [플리스 골프]</span>
-                        </div>
-                        <h3 class="text-[22px] font-bold text-[#334732] mb-3 leading-snug">1:1 트랙맨 레슨 & 프라이빗 타석</h3>
-                        <div class="space-y-2 mb-6">
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 평일 오전 10시 ~ 오후 2시</p>
-                            <p class="text-[14px] text-[#59000A] font-bold">🎁 프로 원포인트(15분) + 트랙맨(60분)</p>
-                        </div>
-                        <!-- 가격 -->
-                        <div class="mt-auto pt-5 border-t border-gray-100 flex items-end justify-between mb-5">
-                            <div class="flex flex-col gap-0.5">
-                                <span class="text-[11px] text-gray-400 font-medium">정상 이용가</span>
-                                <span class="text-sm text-gray-400 line-through">80,000원</span>
-                            </div>
-                            <div class="flex flex-col text-right gap-0.5">
-                                <span class="text-[12px] text-[#59000A] font-bold">틈새 혜택가</span>
-                                <span class="text-3xl font-black text-[#59000A] tracking-tight">39,000원</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://tally.so/r/xXdV1E" target="_blank" class="block w-full text-center bg-[#334732] text-white py-4 rounded-xl font-bold text-[15px] hover:bg-[#243323] transition-colors">39,000원에 타석 예약하기 ➔</a>
-                </div>
-
-                <!-- 카드 2: 필라테스 담다 -->
-                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative">
-                    <div class="h-56 bg-gray-100 rounded-[20px] mb-5 overflow-hidden relative border border-gray-100">
-                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" alt="필라테스" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex flex-col flex-grow px-1">
-                        <!-- 위치 태그 & 상호명 -->
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-[#F4F0E6] text-gray-700 text-[11px] font-bold px-2.5 py-1 rounded-md">📍 마곡나루역 도보 3분</span>
-                            <span class="text-xs font-bold text-gray-400">마곡 [필라테스, 담다]</span>
-                        </div>
-                        <h3 class="text-[22px] font-bold text-[#334732] mb-3 leading-snug">1:1 기구 필라테스 프리미엄 체험</h3>
-                        <div class="space-y-2 mb-6">
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 평일 오후 2시 ~ 4시 방문 한정</p>
-                            <p class="text-[14px] text-[#59000A] font-bold">🎁 리뷰 작성 시 스벅 세트 증정!</p>
-                        </div>
-                        <!-- 가격 -->
-                        <div class="mt-auto pt-5 border-t border-gray-100 flex items-end justify-between mb-5">
-                            <div class="flex flex-col gap-0.5">
-                                <span class="text-[11px] text-gray-400 font-medium">정상가</span>
-                                <span class="text-sm text-gray-400 line-through">40,000원</span>
-                            </div>
-                            <div class="flex flex-col text-right gap-0.5">
-                                <span class="text-[12px] text-[#59000A] font-bold">실 체감가</span>
-                                <span class="text-3xl font-black text-[#59000A] tracking-tight">19,900원</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://tally.so/r/xXdV1E" target="_blank" class="block w-full text-center bg-[#F4F0E6] border border-[#334732] text-[#334732] py-4 rounded-xl font-bold text-[15px] hover:bg-[#EBE5D3] transition-colors">남은 자리 선점하기 ➔</a>
-                </div>
-
-                <!-- 카드 3: 북촌다락방 -->
-                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative">
-                    <div class="h-56 bg-gray-100 rounded-[20px] mb-5 overflow-hidden relative border border-gray-100">
-                        <!-- 이미지 우측 상단 뱃지 -->
-                        <div class="absolute top-0 right-0 bg-[#334732] text-white text-[11px] font-bold px-3 py-1.5 rounded-bl-xl z-10">조용한 휴식 공간</div>
-                        <img src="https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?auto=format&fit=crop&w=800&q=80" alt="다도 공간" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex flex-col flex-grow px-1">
-                        <!-- 위치 태그 & 상호명 -->
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-[#F4F0E6] text-gray-700 text-[11px] font-bold px-2.5 py-1 rounded-md">📍 안국역 도보 8분</span>
-                            <span class="text-xs font-bold text-gray-400">북촌 [북촌다락방]</span>
-                        </div>
-                        <h3 class="text-[22px] font-bold text-[#334732] mb-3 leading-snug">프라이빗 다도 & 공간 대여</h3>
-                        <div class="space-y-2 mb-6">
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 평일 낮 시간 한정 (최대 2시간)</p>
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 차와 다과 기본 세팅 제공</p>
-                        </div>
-                        <!-- 가격 -->
-                        <div class="mt-auto pt-5 border-t border-gray-100 flex items-end justify-between mb-5">
-                            <div class="flex flex-col gap-0.5">
-                                <span class="text-[11px] text-gray-400 font-medium">정상 대관료</span>
-                                <span class="text-sm text-gray-400 line-through">30,000원</span>
-                            </div>
-                            <div class="flex flex-col text-right gap-0.5">
-                                <span class="text-[12px] text-[#59000A] font-bold">틈새 혜택가</span>
-                                <span class="text-3xl font-black text-[#59000A] tracking-tight">15,000원</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://tally.so/r/xXdV1E" target="_blank" class="block w-full text-center bg-[#F4F0E6] border border-[#334732] text-[#334732] py-4 rounded-xl font-bold text-[15px] hover:bg-[#EBE5D3] transition-colors">공간 예약하기 ➔</a>
-                </div>
-
-                <!-- 카드 4: 살롱 799 -->
-                <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative">
-                    <div class="h-56 bg-gray-100 rounded-[20px] mb-5 overflow-hidden relative border border-gray-100">
-                        <!-- 이미지 우측 상단 뱃지 -->
-                        <div class="absolute top-0 right-0 bg-[#334732] text-white text-[11px] font-bold px-3 py-1.5 rounded-bl-xl z-10">수석 디자이너 지정</div>
-                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80" alt="미용실 흑백" class="w-full h-full object-cover grayscale">
-                    </div>
-                    <div class="flex flex-col flex-grow px-1">
-                        <!-- 위치 태그 & 상호명 -->
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-[#F4F0E6] text-gray-700 text-[11px] font-bold px-2.5 py-1 rounded-md">📍 마곡역 도보 1분</span>
-                            <span class="text-xs font-bold text-gray-400">마곡 [살롱 799]</span>
-                        </div>
-                        <h3 class="text-[22px] font-bold text-[#334732] mb-3 leading-snug">평일 낮 펌/염색 하프세일</h3>
-                        <div class="space-y-2 mb-6">
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 평일 오전 11시 ~ 오후 3시</p>
-                            <p class="text-[14px] text-gray-600 font-medium">✔️ 쇄골 기장까지 기장 추가 무료</p>
-                        </div>
-                        <!-- 가격 -->
-                        <div class="mt-auto pt-5 border-t border-gray-100 flex items-end justify-between mb-5">
-                            <div class="flex flex-col gap-0.5">
-                                <span class="text-[11px] text-gray-400 font-medium">정상가 (평균)</span>
-                                <span class="text-sm text-gray-400 line-through">100,000원</span>
-                            </div>
-                            <div class="flex flex-col text-right gap-0.5">
-                                <span class="text-[12px] text-[#59000A] font-bold">타임 세일가</span>
-                                <span class="text-3xl font-black text-[#59000A] tracking-tight">49,000원</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://tally.so/r/xXdV1E" target="_blank" class="block w-full text-center bg-[#F4F0E6] border border-[#334732] text-[#334732] py-4 rounded-xl font-bold text-[15px] hover:bg-[#EBE5D3] transition-colors">디자이너 예약하기 ➔</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 이용 방법 가이드 -->
-    <section id="guide" class="py-24 px-6 bg-white border-y border-deep-forest/10">
-        <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-16 text-deep-forest">틈(TEUM) 이용 방법은 아주 간단합니다</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                <!-- 연결선 (데스크탑) -->
-                <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-deep-forest/10 z-0"></div>
-                
-                <div class="relative z-10 flex flex-col items-center bg-brand-beige p-8 rounded-[24px] shadow-sm border border-deep-forest/5">
-                    <div class="w-14 h-14 rounded-full bg-deep-forest text-white flex items-center justify-center font-bold text-2xl mb-6 shadow-md">1</div>
-                    <h3 class="font-bold text-xl mb-3 text-deep-forest">내 주변 틈새 발견</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed font-medium break-keep">우리 동네 매장에서 오늘 비어있는<br/>시간과 혜택가를 확인합니다.</p>
-                </div>
-
-                <div class="relative z-10 flex flex-col items-center bg-brand-beige p-8 rounded-[24px] shadow-sm border border-deep-forest/5">
-                    <div class="w-14 h-14 rounded-full bg-deep-forest text-white flex items-center justify-center font-bold text-2xl mb-6 shadow-md">2</div>
-                    <h3 class="font-bold text-xl mb-3 text-deep-forest">10초 만에 예약 선점</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed font-medium break-keep">원하는 시간을 선택하고<br/>이름과 연락처만 남기면 예약 완료!</p>
-                </div>
-
-                <div class="relative z-10 flex flex-col items-center bg-brand-beige p-8 rounded-[24px] shadow-sm border border-deep-forest/5">
-                    <div class="w-14 h-14 rounded-full bg-deep-forest text-white flex items-center justify-center font-bold text-2xl mb-6 shadow-md">3</div>
-                    <h3 class="font-bold text-xl mb-3 text-deep-forest">방문 및 혜택 누리기</h3>
-                    <p class="text-deep-forest/70 text-sm leading-relaxed font-medium break-keep">예약 확정 문자를 받고 매장에 방문하여<br/>현장 결제 후 서비스를 이용합니다.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 틈 트리 (게이미피케이션) 섹션 -->
-    <section id="teum-tree" class="py-24 px-6 bg-deep-forest text-brand-beige relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="text-center mb-16">
-                <span class="bg-[#FFD54F] text-deep-forest px-4 py-1.5 rounded-full text-sm font-bold mb-4 inline-block">100% 노쇼(No-show) 청정 구역</span>
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">약속을 지킬수록 자라나는 '틈 트리 🌳'</h2>
-                <p class="text-brand-beige/80 font-medium break-keep">동네 상점과의 소중한 약속을 지켜주세요. 방문 기록이 쌓일수록 엄청난 혜택이 열립니다.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white/10 p-8 rounded-[32px] border border-white/20 backdrop-blur-md text-center">
-                    <div class="text-5xl mb-4">🌱</div>
-                    <div class="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Lv.1 새싹 이웃</div>
-                    <h3 class="font-bold text-xl text-white mb-3">가입 및 첫 예약</h3>
-                    <p class="text-brand-beige/70 text-sm leading-relaxed break-keep">틈에 가입한 모든 동네 이웃님들입니다. 첫 예약을 무사히 마치고 리뷰를 남겨보세요!</p>
-                </div>
-                <div class="bg-white/10 p-8 rounded-[32px] border border-white/20 backdrop-blur-md text-center relative">
-                    <div class="text-5xl mb-4">🌿</div>
-                    <div class="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Lv.2 잎새 이웃</div>
-                    <h3 class="font-bold text-xl text-white mb-3">누적 방문 3회 달성</h3>
-                    <p class="text-brand-beige/70 text-sm leading-relaxed break-keep">사장님들이 가장 환영하는 믿음직한 이웃입니다. <strong class="text-[#FFD54F]">1,000원 추가 할인 쿠폰</strong>이 상시 지급됩니다.</p>
-                </div>
-                <div class="bg-white/10 p-8 rounded-[32px] border border-[#FFD54F]/50 backdrop-blur-md text-center relative shadow-[0_0_30px_rgba(255,213,79,0.15)] transform md:-translate-y-4">
-                    <div class="absolute -top-4 -right-4 text-4xl animate-bounce">👑</div>
-                    <div class="text-5xl mb-4">🌳</div>
-                    <div class="inline-block bg-[#FFD54F] text-deep-forest text-xs font-bold px-3 py-1 rounded-full mb-3">Lv.3 숲의 수호자</div>
-                    <h3 class="font-bold text-xl text-white mb-3">누적 방문 10회 달성</h3>
-                    <p class="text-brand-beige/70 text-sm leading-relaxed break-keep">동네 상권을 살리는 최고의 VIP! <strong class="text-[#FFD54F]">인기 매장 마감 특가 우선 알림권</strong>을 드립니다.</p>
-                </div>
-            </div>
-            
-            <div class="mt-12 bg-black/20 p-6 rounded-2xl text-center border border-white/10">
-                <p class="text-sm text-brand-beige/80 font-medium">⚠️ <strong class="text-red-400">주의:</strong> 사전 연락 없는 무단 노쇼(No-show) 발생 시, 공들여 키운 틈 트리는 즉시 고사(사망)하며 향후 서비스 이용이 영구 제한됩니다.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 이웃 후기 섹션 -->
-    <section id="reviews" class="py-24 px-6 bg-brand-beige relative overflow-hidden">
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-deep-forest">이웃들의 생생한 후기 💬</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white/80 p-8 rounded-[24px] shadow-sm border border-deep-forest/10 hover:-translate-y-2 transition-transform">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-deep-forest/80 leading-relaxed text-sm mb-6 break-keep">"시설 너무 좋고 원포인트 레슨까지 3만 원대라니 믿기지 않아요. 앞으로 평일 낮만 노려야겠습니다!"</p>
-                    <div class="flex items-center gap-3 border-t border-deep-forest/10 pt-4">
-                        <div class="w-10 h-10 bg-brand-beige rounded-full flex items-center justify-center font-bold text-sm text-deep-forest">최*훈</div>
-                        <div><div class="font-bold text-sm text-deep-forest">분당 직장인</div><div class="text-xs text-deep-forest/50">트랙맨 레슨 & 타석</div></div>
-                    </div>
-                </div>
-                <div class="bg-white/80 p-8 rounded-[24px] shadow-sm border border-deep-forest/10 hover:-translate-y-2 transition-transform">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-deep-forest/80 leading-relaxed text-sm mb-6 break-keep">"정규 회원이랑 똑같이 꼼꼼하게 1:1로 티칭해주셔서 감동받았습니다. 단골 될 것 같아요."</p>
-                    <div class="flex items-center gap-3 border-t border-deep-forest/10 pt-4">
-                        <div class="w-10 h-10 bg-brand-beige rounded-full flex items-center justify-center font-bold text-sm text-deep-forest">김*지</div>
-                        <div><div class="font-bold text-sm text-deep-forest">마곡 프리랜서</div><div class="text-xs text-deep-forest/50">1:1 기구 필라테스</div></div>
-                    </div>
-                </div>
-                <div class="bg-white/80 p-8 rounded-[24px] shadow-sm border border-deep-forest/10 hover:-translate-y-2 transition-transform">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-deep-forest/80 leading-relaxed text-sm mb-6 break-keep">"염색할 때 추가 비용 내는 게 아까웠는데 진짜 1원도 안 받으시더라고요. 수석 디자이너님 최고!"</p>
-                    <div class="flex items-center gap-3 border-t border-deep-forest/10 pt-4">
-                        <div class="w-10 h-10 bg-brand-beige rounded-full flex items-center justify-center font-bold text-sm text-deep-forest">박*서</div>
-                        <div><div class="font-bold text-sm text-deep-forest">안국 대학생</div><div class="text-xs text-deep-forest/50">프리미엄 헤어 펌</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 카카오톡 채널 연동 -->
-    <section class="py-16 bg-white border-y border-deep-forest/10">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <div class="w-16 h-16 bg-[#FEE500] rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-sm">
-                <svg class="w-8 h-8 text-black" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5.523 0-10 3.52-10 7.864 0 2.768 1.83 5.232 4.606 6.64-.265 1.053-1.002 3.666-1.026 3.79-.033.167.054.267.158.267.085 0 .153-.023.235-.08 0 0 3.328-2.316 4.744-3.32.42.062.85.093 1.283.093 5.523 0 10-3.52 10-7.864C22 6.52 17.523 3 12 3z"/></svg>
-            </div>
-            <h2 class="text-2xl font-bold mb-3 text-deep-forest">원하시는 매장이 아직 없나요?</h2>
-            <p class="text-deep-forest/70 mb-8 font-medium">틈(TEUM) 카카오 채널을 추가하시면,<br/>우리 동네 새로운 마감 특가가 열릴 때 가장 먼저 알려드려요!</p>
-            <a href="https://pf.kakao.com/_UCCqX/friend" target="_blank" class="inline-flex items-center justify-center gap-2 bg-[#FEE500] text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-[#FDD800] transition-colors shadow-md">
-                카카오톡으로 특가 알림 받기
-            </a>
-        </div>
-    </section>
-
-    <!-- 자주 묻는 질문 (FAQ) -->
-    <section id="faq" class="py-24 px-6 bg-brand-beige">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold mb-10 text-center text-deep-forest">자주 묻는 질문 (FAQ)</h2>
-            <div class="space-y-4">
-                <details class="bg-white rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer shadow-sm" open>
-                    <summary class="font-bold text-lg px-6 py-5 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 정말 현장에서 추가 결제나 강요가 없나요?
-                        <span class="text-xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-6 pb-6 text-deep-forest/80 text-sm leading-relaxed border-t border-deep-forest/10 pt-4 mt-2">
-                        A. 네, 절대 없습니다! 틈(TEUM)에 입점된 모든 매장은 '명시된 가격 외 추가 결제 유도 금지' 서약을 맺고 있습니다. 만약 현장에서 부당한 결제 요구가 있었다면 고객센터로 신고해 주세요.
-                    </div>
-                </details>
-
-                <details class="bg-white rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer shadow-sm">
-                    <summary class="font-bold text-lg px-6 py-5 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 결제는 어떻게 진행되나요?
-                        <span class="text-xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-6 pb-6 text-deep-forest/80 text-sm leading-relaxed border-t border-deep-forest/10 pt-4 mt-2">
-                        A. 현재는 서비스 시범 운영 기간으로 전액 '매장 현장 결제'로 진행됩니다. 예약 폼을 작성하시면 매장에서 예약 확정 문자를 보내드리며, 방문 후 명시된 특가 금액만 결제하시면 됩니다.
-                    </div>
-                </details>
-
-                <details class="bg-white rounded-2xl group border border-deep-forest/10 overflow-hidden cursor-pointer shadow-sm">
-                    <summary class="font-bold text-lg px-6 py-5 flex justify-between items-center text-deep-forest outline-none">
-                        Q. 예약 취소나 변경은 어떻게 하나요?
-                        <span class="text-xl group-open:rotate-180 transition-transform">↓</span>
-                    </summary>
-                    <div class="px-6 pb-6 text-deep-forest/80 text-sm leading-relaxed border-t border-deep-forest/10 pt-4 mt-2">
-                        A. 예약 이용 시간 24시간 전까지 매장으로 직접 연락 주시면 취소/변경이 가능합니다. 단, 사전 연락 없는 노쇼(No-show)의 경우 다른 이웃에게 피해가 가므로 향후 플랫폼 이용이 영구 제한됩니다.
-                    </div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- 최종 결제 유도 섹션 -->
-    <section class="py-24 px-6 bg-deep-forest text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        <div class="max-w-3xl mx-auto relative z-10">
-            <h2 class="text-3xl md:text-4xl font-black text-brand-beige mb-6 break-keep">
-                오늘의 빈 시간은 내일이면 사라집니다.
-            </h2>
-            <p class="text-brand-beige/80 text-lg mb-10 font-medium break-keep">
-                수수료 0원, 강요 0%. 우리 동네에서 가장 합리적인 소비를 지금 시작해보세요.
-            </p>
-            <a href="https://tally.so/r/xXdV1E" target="_blank" class="inline-block bg-[#FFD54F] text-deep-forest px-10 py-5 rounded-full font-black text-lg hover:bg-yellow-300 transition-all duration-300 shadow-xl hover:-translate-y-1 transform">
-                🔥 빈 시간 특가 예약하기
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-brand-beige py-12 px-6 pb-32 border-t border-deep-forest/10">
-        <div class="max-w-6xl mx-auto text-center flex flex-col items-center gap-6">
-            <span class="font-bold text-base tracking-widest text-deep-forest mt-0.5">TEUM</span>
-            <div class="text-sm text-deep-forest/60 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 font-medium">
-                <span>대표: 김재모</span> <span class="hidden md:inline">|</span>
-                <span>이메일: teum.offical@gmail.com</span>
-            </div>
-            <p class="text-xs text-deep-forest/40">&copy; 2026 TEUM. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- 모바일 하단 고정 예약 버튼 -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-md border-t border-deep-forest/10 z-50 flex justify-center shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-        <div class="w-full max-w-4xl flex items-center justify-between gap-4">
-            <div class="hidden sm:block">
-                <div class="text-xs text-deep-wine font-bold mb-0.5 animate-pulse">🔥 오늘 마감 임박</div>
-                <div class="text-sm font-bold text-deep-forest">우리 동네 틈새 혜택</div>
-            </div>
-            <a href="https://tally.so/r/xXdV1E" target="_blank" class="flex-grow sm:flex-grow-0 w-full sm:w-auto text-center bg-deep-forest text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-deep-forest-hover transition-colors shadow-lg shadow-deep-forest/30">
-                지금 바로 빈 시간 선점하기 ➔
-            </a>
-        </div>
+    <div class="nav-mobile-menu" id="mobile-menu">
+      <a href="consumer.html" class="nav-mobile-link">동네 혜택 보기</a>
+      <a href="partner.html" class="nav-mobile-link">사장님 입점</a>
+      <button id="mobile-nav-login-btn" class="nav-mobile-link" data-action="login" style="text-align:left">로그인</button>
+      <div id="mobile-nav-user-area" class="hidden">
+        <a href="dashboard.html" class="nav-mobile-link">마이페이지</a>
+        <button class="nav-mobile-link" data-action="logout" style="text-align:left">로그아웃</button>
+      </div>
     </div>
+  </nav>
 
+  <!-- 히어로 섹션 -->
+  <section class="hero-partner">
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-label">🏪 파트너 입점 안내</span>
+        <h1 class="hero-title" style="color:#fff;">
+          월세는 똑같이 나가는데,<br>
+          오후 2시는 왜 비어있을까요?
+        </h1>
+        <p class="hero-sub" style="color:rgba(255,255,255,0.85);">
+          마곡·가양 일대 미용실·네일샵·피부관리실 사장님,<br>
+          평일 낮 공실을 수익으로 바꾸는 방법이 있습니다.
+        </p>
+        <div class="hero-ctas">
+          <a href="#partner-form" class="btn btn-primary btn-lg" style="background:#fff; color:var(--color-forest);">무료 입점 상담 신청하기 (1분)</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 선착순 배너 -->
+  <div style="background:var(--color-accent-warm); color:#fff; text-align:center; padding:12px 24px; font-weight:600; font-size:0.9rem;">
+    🔥 마곡·발산 지역 파트너사 모집 중 — 선착순 마감, 지금 신청하세요!
+  </div>
+
+  <!-- 페인포인트 섹션 -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center mb-40">
+        <p class="section-label">PAIN POINTS</p>
+        <h2 class="section-title">사장님들의 공통된 고민</h2>
+        <p class="section-desc" style="margin:0 auto;">
+          이런 상황, 공감되시나요?
+        </p>
+      </div>
+      <div class="grid-3">
+        <div class="persona-card">
+          <p class="persona-card-quote">
+            "오전엔 꽉 차는데 오후 2~4시엔 항상 비어요.
+            그 시간에 월세·인건비가 그냥 나가는 느낌이에요."
+          </p>
+          <p class="persona-card-name">✂️ 마곡역 인근 미용실 원장님</p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-card-quote">
+            "SNS 할인 이벤트를 했더니 기존 손님들이 불쾌해했어요.
+            조용히 비어있는 시간만 채울 수 있으면 좋겠는데..."
+          </p>
+          <p class="persona-card-name">💅 가양역 네일샵 원장님</p>
+        </div>
+        <div class="persona-card">
+          <p class="persona-card-quote">
+            "노쇼가 제일 무서워요. 예약 잡아두고 안 오면
+            그 시간은 완전 손해잖아요."
+          </p>
+          <p class="persona-card-name">✨ 마곡나루 피부관리실 원장님</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- "할인하면 기존 회원이 불쾌해하지 않나요?" 섹션 -->
+  <section class="section" style="background:var(--color-bg-secondary);">
+    <div class="container" style="max-width:720px; margin:0 auto;">
+      <div class="text-center mb-32">
+        <h2 class="section-title">"할인하면 기존 회원이<br>불쾌해하지 않나요?"</h2>
+      </div>
+      <div style="background:var(--color-bg-surface); border-radius:var(--radius-card); padding:40px; box-shadow:var(--shadow-card);">
+        <p style="font-size:1.05rem; line-height:1.9; color:var(--color-text-secondary); margin-bottom:24px;">
+          많은 사장님들이 가장 먼저 이 질문을 하십니다. 틈의 운영 방식이 다릅니다.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <span style="font-size:1.5rem; flex-shrink:0;">🔒</span>
+            <div>
+              <strong style="color:var(--color-text-primary);">비공개 채널 운영</strong>
+              <p style="color:var(--color-text-secondary); font-size:0.9rem; margin-top:4px;">
+                틈의 딜은 SNS·포털에 노출되지 않습니다. 카카오채널을 추가한 동네 주민에게만 공지됩니다.
+              </p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <span style="font-size:1.5rem; flex-shrink:0;">⏰</span>
+            <div>
+              <strong style="color:var(--color-text-primary);">시간대 분리 운영</strong>
+              <p style="color:var(--color-text-secondary); font-size:0.9rem; margin-top:4px;">
+                평일 낮 14~17시 공실 시간에만 특가를 적용합니다. 기존 정가 손님과 시간이 겹치지 않습니다.
+              </p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <span style="font-size:1.5rem; flex-shrink:0;">🎯</span>
+            <div>
+              <strong style="color:var(--color-text-primary);">타깃 분리</strong>
+              <p style="color:var(--color-text-secondary); font-size:0.9rem; margin-top:4px;">
+                프리랜서·3040 주민·대학생 등 평일 낮에만 자유로운 신규 고객층을 공략합니다. 기존 고객과 다른 고객군입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 입점 프로세스 -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center mb-40">
+        <p class="section-label">HOW IT WORKS</p>
+        <h2 class="section-title">입점 프로세스, 딱 3단계</h2>
+      </div>
+      <div style="max-width:560px; margin:0 auto; display:flex; flex-direction:column; gap:32px;">
+        <div class="process-step">
+          <div class="process-step-number">1</div>
+          <div class="process-step-content">
+            <h3>1분 입점 신청</h3>
+            <p>아래 폼에 매장명·업종·연락처만 입력하시면 끝입니다. 별도 서류 불필요, 가입비·수수료 무료.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-number">2</div>
+          <div class="process-step-content">
+            <h3>빈 시간 카톡으로 전송</h3>
+            <p>담당자가 연락드리면 이번 주 비는 시간대와 제공할 서비스·가격을 카카오톡으로 알려주시면 됩니다.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-number">3</div>
+          <div class="process-step-content">
+            <h3>방문 및 현장 결제</h3>
+            <p>예약된 고객이 방문합니다. 결제는 현장에서 직접 받으시면 됩니다. 추가 절차 없습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 틈 트리 노쇼 방어 섹션 -->
+  <section class="section" style="background:var(--color-bg-secondary);">
+    <div class="container">
+      <div class="text-center mb-40">
+        <p class="section-label">NO-SHOW PROTECTION</p>
+        <h2 class="section-title">틈 트리로 노쇼를 방어하세요</h2>
+        <p class="section-desc" style="margin:0 auto;">
+          방문 이력이 쌓인 신뢰 고객만 예약이 가능하도록 설계되어 있습니다.
+        </p>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;" class="noshow-grid">
+        <div>
+          <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:24px;">
+            <div style="display:flex; align-items:center; gap:12px; background:var(--color-bg-surface); border-radius:var(--radius-card); padding:16px; box-shadow:var(--shadow-card);">
+              <span style="font-size:1.8rem;">🌱</span>
+              <div>
+                <strong style="font-size:0.95rem;">새싹 (Lv.1)</strong>
+                <p style="font-size:0.8rem; color:var(--color-text-muted);">첫 방문 고객 — 예약 가능</p>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; background:var(--color-bg-surface); border-radius:var(--radius-card); padding:16px; box-shadow:var(--shadow-card);">
+              <span style="font-size:1.8rem;">🌿</span>
+              <div>
+                <strong style="font-size:0.95rem;">잎새 (Lv.2)</strong>
+                <p style="font-size:0.8rem; color:var(--color-text-muted);">3회+ 방문 — 신뢰 단골</p>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; background:var(--color-forest-muted); border-radius:var(--radius-card); padding:16px; border:1.5px solid var(--color-forest);">
+              <span style="font-size:1.8rem;">🌳</span>
+              <div>
+                <strong style="font-size:0.95rem; color:var(--color-forest);">숲의 수호자 (Lv.3)</strong>
+                <p style="font-size:0.8rem; color:var(--color-forest);">10회+ 방문 — VIP 고객</p>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.9rem; color:var(--color-text-secondary); line-height:1.7;">
+            노쇼 발생 시 자동으로 틈 트리 레벨이 강등됩니다.
+            반복 노쇼 고객은 예약이 제한되어, 사장님께서 믿을 수 있는 고객만 방문합니다.
+          </p>
+        </div>
+        <div>
+          <p style="font-size:0.875rem; font-weight:700; color:var(--color-text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.06em;">파트너 알림 예시</p>
+          <div class="partner-notify-card">
+            <div class="partner-notify-header">
+              <div class="partner-notify-avatar">🌳</div>
+              <div class="partner-notify-info">
+                <strong>틈(TEUM) 예약 알림</strong>
+                <span>방금 전</span>
+              </div>
+            </div>
+            <div class="partner-notify-message">
+              새 예약이 도착했어요! 🎉<br><br>
+              <strong>고객:</strong> ○○○님 (잎새 🌿 · 방문 4회)<br>
+              <strong>서비스:</strong> 평일 낮 헤어 펌<br>
+              <strong>방문일:</strong> 3월 25일 (화) 15:00<br>
+              <strong>연락처:</strong> 010-****-****
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-primary btn-sm" style="flex:1;">확정하기</button>
+              <button class="btn btn-secondary btn-sm" style="flex:1;">문의하기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 입점 신청 폼 -->
+  <section class="section" id="partner-form">
+    <div class="container" style="max-width:560px; margin:0 auto;">
+      <div class="text-center mb-40">
+        <p class="section-label">JOIN US</p>
+        <h2 class="section-title">무료 입점 신청하기</h2>
+        <p class="section-desc" style="margin:0 auto;">
+          1분이면 충분합니다. 24시간 이내 담당자가 연락드립니다.
+        </p>
+      </div>
+
+      <!-- 성공 메시지 (기본 hidden) -->
+      <div id="partner-form-success" class="hidden" style="text-align:center; padding:48px 24px; background:var(--color-forest-muted); border-radius:var(--radius-card); border:1.5px solid var(--color-forest);">
+        <div style="font-size:3rem; margin-bottom:16px;">🎉</div>
+        <h3 style="font-size:1.3rem; font-weight:700; color:var(--color-forest); margin-bottom:12px;">신청이 완료되었습니다!</h3>
+        <p style="color:var(--color-text-secondary); line-height:1.7;">
+          24시간 이내 담당자가 카카오톡으로 연락드립니다.<br>
+          카카오채널을 추가해두시면 더 빠르게 연락받으실 수 있어요.
+        </p>
+        <a href="https://pf.kakao.com/_UCCqX/friend" target="_blank" rel="noopener noreferrer" class="btn-kakao" style="margin-top:24px; display:inline-flex;">
+          카카오채널 추가하기
+        </a>
+      </div>
+
+      <!-- 신청 폼 -->
+      <form id="partner-apply-form" novalidate style="background:var(--color-bg-surface); border-radius:var(--radius-card); padding:40px; box-shadow:var(--shadow-card); border:1px solid var(--color-border);">
+        <div class="form-group">
+          <label class="form-label" for="partner-biz-name">매장명 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="partner-biz-name" placeholder="예: 살롱 000" required>
+          <span class="form-error" id="partner-biz-name-error" style="display:none;"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="partner-category">업종 <span class="required">*</span></label>
+          <select class="form-select" id="partner-category" required>
+            <option value="">업종을 선택하세요</option>
+            <option value="hair">헤어 미용실</option>
+            <option value="nail">네일샵</option>
+            <option value="skin">피부관리실</option>
+            <option value="fitness">피트니스·요가</option>
+            <option value="space">공간대여</option>
+          </select>
+          <span class="form-error" id="partner-category-error" style="display:none;"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="partner-owner-name">대표자명 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="partner-owner-name" placeholder="홍길동" required>
+          <span class="form-error" id="partner-owner-name-error" style="display:none;"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="partner-phone">연락처 <span class="required">*</span></label>
+          <input type="tel" class="form-input" id="partner-phone" placeholder="010-0000-0000" required>
+          <span class="form-error" id="partner-phone-error" style="display:none;"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="partner-address">매장 주소 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="partner-address" placeholder="예: 서울 강서구 마곡동 000-00" required>
+          <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:4px;">현재 마곡·가양·발산 지역 매장만 신청 가능합니다.</p>
+          <span class="form-error" id="partner-address-error" style="display:none;"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="partner-submit-btn" style="margin-top:8px;">
+          무료 입점 신청하기
+        </button>
+        <p style="text-align:center; font-size:0.8rem; color:var(--color-text-muted); margin-top:16px;">
+          가입비·수수료 없음 · 언제든 탈퇴 가능
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ 섹션 -->
+  <section class="section" style="background:var(--color-bg-secondary);">
+    <div class="container" style="max-width:680px; margin:0 auto;">
+      <div class="text-center mb-40">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">사장님 자주 묻는 질문</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>정말 수수료가 없나요?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              네, 현재 MVP 파일럿 기간 동안 입점비·수수료·광고비 모두 무료입니다.
+              향후 유료 전환 시에는 최소 30일 전에 사전 안내드리며, 사장님이 직접 선택하실 수 있습니다.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>결제 정산은 어떻게 되나요?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              현재는 고객이 방문 시 현장에서 직접 결제합니다. 별도의 정산 시스템 없이
+              사장님이 직접 카드 또는 현금으로 받으시면 됩니다. 앱 내 결제 기능은 준비 중입니다.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>노쇼가 발생하면 어떻게 되나요?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              틈 트리 시스템으로 노쇼 고객의 레벨이 강등됩니다. 반복 노쇼 고객은
+              자동으로 예약이 차단되며, 피해가 발생하면 담당자에게 카카오톡으로 연락주시면
+              빠르게 대응해드립니다.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>계약 기간이 있나요?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              별도 계약 기간 없이 자유롭게 운영하실 수 있습니다.
+              특가 딜을 올리고 싶을 때만 제보해주시면 되고, 원하시면 언제든 빠져나오실 수 있습니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo-text">틈 TEUM</div>
+          <p class="footer-tagline">우리 동네의 비어있는 시간,<br>가장 합리적인 혜택이 되다.</p>
+        </div>
+        <div class="footer-links">
+          <h4>서비스</h4>
+          <ul>
+            <li><a href="consumer.html">동네 혜택 보기</a></li>
+            <li><a href="partner.html">사장님 입점</a></li>
+            <li><a href="dashboard.html">마이페이지</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>채널</h4>
+          <ul>
+            <li><a href="https://pf.kakao.com/_UCCqX/friend" target="_blank" rel="noopener noreferrer">카카오채널</a></li>
+            <li><a href="#" aria-label="인스타그램(준비중)">인스타그램 (준비중)</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="footer-bottom">
+        <div class="footer-meta">
+          <p>대표: 김재모 &nbsp;|&nbsp; teum.offical@gmail.com</p>
+          <p>서울특별시 강서구 마곡·가양동 일대 서비스</p>
+        </div>
+        <span class="footer-rise-badge">🏆 2026 정부 창업지원사업(RiSE) 선정 파일럿 프로젝트</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 토스트 컨테이너 -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- 틈 JS 모듈 -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/booking.js"></script>
+
+  <script>
+    // Auth 초기화
+    initAuth();
+
+    // ——————————————————————————————
+    // FAQ 아코디언
+    // ——————————————————————————————
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => o.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // ——————————————————————————————
+    // 파트너 신청 폼
+    // ——————————————————————————————
+    document.getElementById('partner-phone').addEventListener('input', (e) => {
+      e.target.value = formatPhone(e.target.value);
+    });
+
+    document.getElementById('partner-apply-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearPartnerErrors();
+
+      const bizName = document.getElementById('partner-biz-name').value.trim();
+      const category = document.getElementById('partner-category').value;
+      const ownerName = document.getElementById('partner-owner-name').value.trim();
+      const phone = document.getElementById('partner-phone').value.trim();
+      const address = document.getElementById('partner-address').value.trim();
+
+      let valid = true;
+
+      if (!bizName) {
+        showPartnerError('partner-biz-name-error', '매장명을 입력해주세요.');
+        valid = false;
+      }
+      if (!category) {
+        showPartnerError('partner-category-error', '업종을 선택해주세요.');
+        valid = false;
+      }
+      if (!ownerName) {
+        showPartnerError('partner-owner-name-error', '대표자명을 입력해주세요.');
+        valid = false;
+      }
+      if (!phone || !validatePhone(phone)) {
+        showPartnerError('partner-phone-error', '010-XXXX-XXXX 형식으로 입력해주세요.');
+        valid = false;
+      }
+      if (!address) {
+        showPartnerError('partner-address-error', '매장 주소를 입력해주세요.');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      const btn = document.getElementById('partner-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> 신청 중...';
+
+      try {
+        await db.collection('partners').add({
+          businessName: bizName,
+          ownerName,
+          phone,
+          address,
+          category,
+          status: 'pending',
+          joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        document.getElementById('partner-apply-form').classList.add('hidden');
+        document.getElementById('partner-form-success').classList.remove('hidden');
+        window.scrollTo({ top: document.getElementById('partner-form').offsetTop - 80, behavior: 'smooth' });
+      } catch (err) {
+        console.error('파트너 신청 오류:', err);
+        showToast('신청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+        btn.disabled = false;
+        btn.textContent = '무료 입점 신청하기';
+      }
+    });
+
+    function showPartnerError(id, msg) {
+      const el = document.getElementById(id);
+      if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
+
+    function clearPartnerErrors() {
+      ['partner-biz-name-error', 'partner-category-error', 'partner-owner-name-error',
+       'partner-phone-error', 'partner-address-error'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
+  </script>
+
+  <style>
+    @media (max-width: 768px) {
+      .noshow-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 </body>
 </html>

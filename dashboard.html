@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 — 틈(TEUM)</title>
+  <meta name="description" content="나의 틈 트리 레벨과 예약 내역을 확인하세요.">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 네비게이션 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo.svg" alt="틈 TEUM" height="36">
+      </a>
+      <div class="nav-links">
+        <a href="consumer.html" class="nav-link">동네 혜택 보기</a>
+        <a href="partner.html" class="nav-link">사장님 입점</a>
+        <button id="nav-login-btn" class="btn btn-primary btn-sm hidden" data-action="login">로그인</button>
+        <div id="nav-user-area" class="hidden d-flex align-center gap-8">
+          <span id="nav-user-name" class="nav-link"></span>
+          <a href="dashboard.html" class="btn btn-secondary btn-sm" style="color:var(--color-forest);">마이페이지</a>
+          <button class="nav-link" data-action="logout">로그아웃</button>
+        </div>
+      </div>
+      <button class="nav-hamburger" id="hamburger-btn" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile-menu" id="mobile-menu">
+      <a href="consumer.html" class="nav-mobile-link">동네 혜택 보기</a>
+      <a href="partner.html" class="nav-mobile-link">사장님 입점</a>
+      <button id="mobile-nav-login-btn" class="nav-mobile-link hidden" data-action="login" style="text-align:left">로그인</button>
+      <div id="mobile-nav-user-area" class="hidden">
+        <a href="dashboard.html" class="nav-mobile-link">마이페이지</a>
+        <button class="nav-mobile-link" data-action="logout" style="text-align:left">로그아웃</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 로딩 화면 -->
+  <div id="loading-screen" style="min-height:60vh; display:flex; align-items:center; justify-content:center;">
+    <div class="text-center">
+      <div class="spinner spinner-forest" style="width:40px; height:40px; border-width:3px; margin:0 auto 16px;"></div>
+      <p style="color:var(--color-text-muted);">로딩 중...</p>
+    </div>
+  </div>
+
+  <!-- 대시보드 본문 (초기 hidden) -->
+  <div id="dashboard-content" class="hidden">
+
+    <!-- 대시보드 헤더 -->
+    <div class="dashboard-header">
+      <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+          <div>
+            <h1 class="dashboard-user-name" id="dashboard-user-name">—</h1>
+            <p class="dashboard-tree-level" id="dashboard-tree-level">—</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" data-action="logout" style="color:#fff; border-color:rgba(255,255,255,0.5);">
+            로그아웃
+          </button>
+        </div>
+
+        <!-- 틈 트리 게이지 -->
+        <div style="margin-top:32px; background:rgba(255,255,255,0.12); border-radius:var(--radius-card); padding:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:0.9rem; font-weight:600; color:rgba(255,255,255,0.9);" id="gauge-label">틈 트리 성장</span>
+            <span style="font-size:0.85rem; color:rgba(255,255,255,0.7);" id="gauge-count">0 / 3회</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="gauge-bar" style="width:0%; background:#fff;"></div>
+          </div>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.65); margin-top:8px;" id="gauge-next"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 예약 내역 섹션 -->
+    <section class="section">
+      <div class="container">
+        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:24px;">예약 내역</h2>
+
+        <!-- 로딩 -->
+        <div id="bookings-loading" class="text-center" style="padding:48px 0;">
+          <div class="spinner spinner-forest" style="width:32px; height:32px; border-width:2px; margin:0 auto 12px;"></div>
+          <p style="color:var(--color-text-muted);">불러오는 중...</p>
+        </div>
+
+        <!-- 빈 상태 -->
+        <div id="bookings-empty" class="empty-state hidden">
+          <div class="empty-state-icon">🌿</div>
+          <h3 class="empty-state-title">아직 예약 내역이 없습니다.</h3>
+          <p class="empty-state-desc">첫 틈새 혜택을 선점해보세요!</p>
+          <a href="consumer.html" class="btn btn-primary">지금 혜택 보러 가기 →</a>
+        </div>
+
+        <!-- 예약 목록 -->
+        <div id="bookings-list" class="hidden" style="display:flex; flex-direction:column; gap:16px;"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 토스트 컨테이너 -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- 틈 JS 모듈 -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/booking.js"></script>
+
+  <script>
+    let unsubscribeBookings = null;
+
+    // 비로그인 접근 시 redirect, 로그인 시 대시보드 로드
+    initAuth({
+      requireAuth: true,
+      onUser: async (user) => {
+        if (!user) return; // requireAuth가 처리
+
+        // 로딩 화면 숨기기
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('dashboard-content').classList.remove('hidden');
+
+        // 유저 정보 로드
+        await loadUserData(user);
+
+        // 예약 내역 구독
+        subscribeBookings(user.uid);
+      }
+    });
+
+    // ——————————————————————————————
+    // 유저 데이터 로드 & 틈 트리 UI
+    // ——————————————————————————————
+    async function loadUserData(user) {
+      try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        let visitCount = 0;
+
+        if (userDoc.exists) {
+          visitCount = userDoc.data().visitCount || 0;
+        }
+
+        const treeInfo = getTreeLevel(visitCount);
+
+        // 이름 표시
+        document.getElementById('dashboard-user-name').textContent =
+          (user.displayName || '회원') + '님';
+        document.getElementById('dashboard-tree-level').textContent =
+          `${treeInfo.emoji} ${treeInfo.name} (Lv.${treeInfo.lv})`;
+
+        // 틈 트리 게이지
+        document.getElementById('gauge-label').textContent =
+          `${treeInfo.emoji} ${treeInfo.name}`;
+
+        let progress = 0;
+        let gaugeCountText = '';
+        let nextText = '';
+
+        if (treeInfo.nextTarget) {
+          const prevTarget = treeInfo.lv === 2 ? 3 : 0;
+          progress = Math.min(((visitCount - prevTarget) / (treeInfo.nextTarget - prevTarget)) * 100, 100);
+          gaugeCountText = `${visitCount} / ${treeInfo.nextTarget}회`;
+          nextText = `다음 레벨까지 ${treeInfo.nextTarget - visitCount}회 남았습니다.`;
+        } else {
+          progress = 100;
+          gaugeCountText = `${visitCount}회 방문 완료`;
+          nextText = '🌳 최고 레벨 달성! 감사합니다.';
+        }
+
+        document.getElementById('gauge-bar').style.width = progress + '%';
+        document.getElementById('gauge-count').textContent = gaugeCountText;
+        document.getElementById('gauge-next').textContent = nextText;
+
+      } catch (err) {
+        console.error('유저 데이터 로드 오류:', err);
+      }
+    }
+
+    // ——————————————————————————————
+    // 예약 내역 구독
+    // ——————————————————————————————
+    function subscribeBookings(userId) {
+      if (unsubscribeBookings) unsubscribeBookings();
+
+      unsubscribeBookings = getUserBookings(userId, (bookings, err) => {
+        document.getElementById('bookings-loading').style.display = 'none';
+
+        if (err) {
+          showToast('예약 내역을 불러오는 중 오류가 발생했습니다.', 'error');
+          return;
+        }
+
+        if (bookings.length === 0) {
+          document.getElementById('bookings-empty').classList.remove('hidden');
+          document.getElementById('bookings-list').classList.add('hidden');
+        } else {
+          document.getElementById('bookings-empty').classList.add('hidden');
+          const list = document.getElementById('bookings-list');
+          list.classList.remove('hidden');
+          list.style.display = 'flex';
+          list.innerHTML = bookings.map(booking => renderBookingCard(booking)).join('');
+        }
+      });
+    }
+
+    // ——————————————————————————————
+    // 예약 카드 렌더링
+    // ——————————————————————————————
+    function renderBookingCard(booking) {
+      const statusLabel = BOOKING_STATUS_LABELS[booking.status] || booking.status;
+      const statusClass = BOOKING_STATUS_CLASS[booking.status] || 'booking-status-pending';
+
+      const createdAt = booking.createdAt
+        ? (booking.createdAt.toDate ? booking.createdAt.toDate().toLocaleDateString('ko-KR') : '')
+        : '';
+
+      return `
+        <div style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-card); padding:20px 24px; box-shadow:var(--shadow-card);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+            <div>
+              <h3 style="font-size:1rem; font-weight:700; margin-bottom:4px;">${escapeHtml(booking.dealTitle || '—')}</h3>
+              <p style="font-size:0.875rem; color:var(--color-text-muted);">
+                ${escapeHtml(booking.partnerName || '—')}
+              </p>
+            </div>
+            <span class="booking-status-badge ${statusClass}">${statusLabel}</span>
+          </div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:0.85rem; color:var(--color-text-secondary); border-top:1px solid var(--color-border); padding-top:12px;">
+            ${booking.visitDate ? `<span>📅 ${booking.visitDate}</span>` : ''}
+            ${booking.visitTime ? `<span>🕐 ${booking.visitTime}</span>` : ''}
+            ${booking.discountedPrice ? `<span>💰 ${booking.discountedPrice.toLocaleString()}원</span>` : ''}
+            ${createdAt ? `<span style="margin-left:auto; color:var(--color-text-muted);">신청일 ${createdAt}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    }
+  </script>
+</body>
+</html>

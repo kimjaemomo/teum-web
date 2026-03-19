@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>어드민 대시보드 — 틈(TEUM)</title>
+  <!-- 어드민 전용 페이지: 로봇 색인 차단 -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .admin-stat-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .admin-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-forest);
+      margin-bottom: 4px;
+    }
+    .admin-stat-label {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 로딩 화면 -->
+  <div id="loading-screen" style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--color-bg-primary);">
+    <div class="text-center">
+      <div class="spinner spinner-forest" style="width:40px; height:40px; border-width:3px; margin:0 auto 16px;"></div>
+      <p style="color:var(--color-text-muted);">어드민 인증 확인 중...</p>
+    </div>
+  </div>
+
+  <!-- 어드민 본문 (초기 hidden) -->
+  <div id="admin-content" class="hidden">
+
+    <!-- 네비게이션 -->
+    <nav style="background:var(--color-forest); padding:0;">
+      <div style="max-width:var(--max-width); margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:56px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="color:#fff; font-weight:700; font-size:1.1rem;">틈 TEUM</span>
+          <span style="color:rgba(255,255,255,0.5); font-size:0.8rem;">어드민</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <a href="index.html" style="color:rgba(255,255,255,0.8); font-size:0.875rem;">사이트 보기</a>
+          <button data-action="logout" class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3);">로그아웃</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 어드민 메인 -->
+    <div style="max-width:var(--max-width); margin:0 auto; padding:32px 24px;">
+
+      <h1 style="font-size:1.5rem; font-weight:700; margin-bottom:8px;">대시보드</h1>
+      <p style="color:var(--color-text-muted); margin-bottom:32px;">틈(TEUM) 운영 관리 패널</p>
+
+      <!-- 통계 카드 -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:16px; margin-bottom:40px;">
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="stat-active-deals">—</div>
+          <div class="admin-stat-label">활성 딜</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="stat-total-bookings">—</div>
+          <div class="admin-stat-label">총 예약</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="stat-pending-partners">—</div>
+          <div class="admin-stat-label">파트너 신청 대기</div>
+        </div>
+      </div>
+
+      <!-- 탭 네비게이션 -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-panel="panel-deals">딜 관리</button>
+        <button class="admin-tab" data-panel="panel-deal-form">딜 등록</button>
+        <button class="admin-tab" data-panel="panel-bookings">예약 현황</button>
+        <button class="admin-tab" data-panel="panel-partners">파트너 신청</button>
+      </div>
+
+      <!-- 패널: 딜 목록 -->
+      <div class="admin-panel active" id="panel-deals">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2 style="font-size:1.1rem; font-weight:700;">등록된 딜</h2>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>딜 제목</th>
+                <th>파트너</th>
+                <th>카테고리</th>
+                <th>특가</th>
+                <th>슬롯</th>
+                <th>상태</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="deals-table-body">
+              <tr><td colspan="7" style="text-align:center; padding:32px; color:var(--color-text-muted);">
+                <div class="spinner spinner-forest" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px;"></div>
+                불러오는 중...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 패널: 딜 등록 폼 -->
+      <div class="admin-panel" id="panel-deal-form">
+        <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:24px;">새 딜 등록</h2>
+        <div style="background:var(--color-bg-surface); border:1px solid var(--color-border); border-radius:var(--radius-card); padding:32px;">
+          <form id="deal-register-form" novalidate>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;" class="deal-form-grid">
+              <div class="form-group">
+                <label class="form-label" for="deal-title">딜 제목 *</label>
+                <input type="text" class="form-input" id="deal-title" placeholder="예: 평일 낮 헤어 펌/염색 하프세일" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-partner-name">파트너명 *</label>
+                <input type="text" class="form-input" id="deal-partner-name" placeholder="예: 살롱 799" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-category">카테고리 *</label>
+                <select class="form-select" id="deal-category" required>
+                  <option value="">선택</option>
+                  <option value="hair">헤어·뷰티</option>
+                  <option value="nail">네일</option>
+                  <option value="skin">피부관리</option>
+                  <option value="fitness">피트니스</option>
+                  <option value="space">공간대여</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-status">상태 *</label>
+                <select class="form-select" id="deal-status" required>
+                  <option value="draft">초안 (draft)</option>
+                  <option value="active">활성 (active)</option>
+                  <option value="closed">마감 (closed)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-location">위치</label>
+                <input type="text" class="form-input" id="deal-location" placeholder="예: 마곡역 도보 1분">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-address">주소</label>
+                <input type="text" class="form-input" id="deal-address" placeholder="예: 서울 강서구 마곡동 000-00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-original-price">정상가 (원) *</label>
+                <input type="number" class="form-input" id="deal-original-price" placeholder="100000" required min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-discounted-price">특가 (원) *</label>
+                <input type="number" class="form-input" id="deal-discounted-price" placeholder="49000" required min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-total-slots">총 자리 수 *</label>
+                <input type="number" class="form-input" id="deal-total-slots" placeholder="3" required min="1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-available-date">이용 가능 날짜 *</label>
+                <input type="date" class="form-input" id="deal-available-date" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-time-start">시작 시간 *</label>
+                <input type="time" class="form-input" id="deal-time-start" value="14:00" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deal-time-end">종료 시간 *</label>
+                <input type="time" class="form-input" id="deal-time-end" value="17:00" required>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label" for="deal-expires-at">딜 만료 일시 *</label>
+                <input type="datetime-local" class="form-input" id="deal-expires-at" required>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label" for="deal-image-url">이미지 URL (선택)</label>
+                <input type="url" class="form-input" id="deal-image-url" placeholder="https://...">
+                <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:4px;">이미지 URL이 없으면 그라디언트 배경이 표시됩니다.</p>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label" for="deal-description">설명</label>
+                <textarea class="form-textarea" id="deal-description" placeholder="딜에 대한 상세 설명을 입력하세요."></textarea>
+              </div>
+              <div class="form-group" style="grid-column:1/-1;">
+                <label class="form-label" for="deal-tags">태그 (쉼표로 구분)</label>
+                <input type="text" class="form-input" id="deal-tags" placeholder="예: 펌, 염색, 여성">
+              </div>
+            </div>
+
+            <div id="deal-form-error" style="display:none; background:#FDECEA; border-radius:var(--radius-input); padding:12px 16px; color:var(--color-danger); font-size:0.875rem; margin-top:16px; margin-bottom:8px;"></div>
+
+            <div style="display:flex; gap:12px; margin-top:24px;">
+              <button type="submit" class="btn btn-primary" id="deal-submit-btn">딜 등록하기</button>
+              <button type="reset" class="btn btn-secondary">초기화</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 패널: 예약 현황 -->
+      <div class="admin-panel" id="panel-bookings">
+        <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">최근 예약 현황 (최대 20건)</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>딜</th>
+                <th>파트너</th>
+                <th>고객명</th>
+                <th>연락처</th>
+                <th>방문일</th>
+                <th>시간</th>
+                <th>금액</th>
+                <th>상태</th>
+                <th>변경</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body">
+              <tr><td colspan="9" style="text-align:center; padding:32px; color:var(--color-text-muted);">
+                <div class="spinner spinner-forest" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px;"></div>
+                불러오는 중...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 패널: 파트너 신청 -->
+      <div class="admin-panel" id="panel-partners">
+        <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">파트너 신청 목록</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>매장명</th>
+                <th>업종</th>
+                <th>대표자</th>
+                <th>연락처</th>
+                <th>주소</th>
+                <th>신청일</th>
+                <th>상태</th>
+                <th>승인</th>
+              </tr>
+            </thead>
+            <tbody id="partners-table-body">
+              <tr><td colspan="8" style="text-align:center; padding:32px; color:var(--color-text-muted);">
+                <div class="spinner spinner-forest" style="width:24px;height:24px;border-width:2px;margin:0 auto 8px;"></div>
+                불러오는 중...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 토스트 컨테이너 -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- 틈 JS 모듈 -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/booking.js"></script>
+
+  <script>
+    // ——————————————————————————————
+    // 어드민 전용 접근 제어
+    // ——————————————————————————————
+    initAuth({
+      adminOnly: true,
+      onUser: (user) => {
+        if (!user) return; // adminOnly가 처리
+
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('admin-content').classList.remove('hidden');
+
+        loadAllData();
+      }
+    });
+
+    // ——————————————————————————————
+    // 탭 전환
+    // ——————————————————————————————
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.panel).classList.add('active');
+      });
+    });
+
+    // ——————————————————————————————
+    // 데이터 로드
+    // ——————————————————————————————
+    function loadAllData() {
+      loadDeals();
+      loadBookings();
+      loadPartners();
+    }
+
+    // 딜 목록
+    function loadDeals() {
+      getAllDeals((deals, err) => {
+        // 통계
+        const activeCount = deals.filter(d => d.status === 'active').length;
+        document.getElementById('stat-active-deals').textContent = activeCount;
+
+        const tbody = document.getElementById('deals-table-body');
+        if (deals.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--color-text-muted);">등록된 딜이 없습니다.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = deals.map(deal => {
+          const statusBadge = deal.status === 'active'
+            ? '<span class="badge badge-success">활성</span>'
+            : deal.status === 'closed'
+            ? '<span class="badge badge-danger">마감</span>'
+            : '<span class="badge badge-gray">초안</span>';
+
+          return `
+            <tr>
+              <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(deal.title)}">${escapeHtml(deal.title || '—')}</td>
+              <td>${escapeHtml(deal.partnerName || '—')}</td>
+              <td>${escapeHtml(CATEGORY_LABELS[deal.category] || deal.category || '—')}</td>
+              <td>${(deal.discountedPrice || 0).toLocaleString()}원</td>
+              <td>${deal.availableSlots ?? '—'} / ${deal.totalSlots ?? '—'}</td>
+              <td>${statusBadge}</td>
+              <td style="white-space:nowrap;">
+                ${deal.status !== 'active' ? `<button class="btn btn-sm" style="background:var(--color-success);color:#fff;" onclick="adminActivateDeal('${deal.id}')">활성화</button>` : ''}
+                ${deal.status !== 'closed' ? `<button class="btn btn-sm btn-secondary" onclick="adminCloseDeal('${deal.id}')" style="margin-left:4px;">마감</button>` : ''}
+                <button class="btn btn-sm btn-danger" onclick="adminDeleteDeal('${deal.id}')" style="margin-left:4px;">삭제</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      });
+    }
+
+    // 예약 현황
+    function loadBookings() {
+      getRecentBookings(20, (bookings, err) => {
+        document.getElementById('stat-total-bookings').textContent = bookings.length;
+
+        const tbody = document.getElementById('bookings-table-body');
+        if (bookings.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:32px; color:var(--color-text-muted);">예약 내역이 없습니다.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = bookings.map(b => {
+          const statusLabel = BOOKING_STATUS_LABELS[b.status] || b.status;
+          const statusClass = BOOKING_STATUS_CLASS[b.status] || 'booking-status-pending';
+          const createdAt = b.createdAt
+            ? (b.createdAt.toDate ? b.createdAt.toDate().toLocaleDateString('ko-KR') : '')
+            : '';
+
+          return `
+            <tr>
+              <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(b.dealTitle)}">${escapeHtml(b.dealTitle || '—')}</td>
+              <td>${escapeHtml(b.partnerName || '—')}</td>
+              <td>${escapeHtml(b.userName || '—')}</td>
+              <td>${escapeHtml(b.userPhone || '—')}</td>
+              <td>${b.visitDate || '—'}</td>
+              <td>${b.visitTime || '—'}</td>
+              <td>${b.discountedPrice ? b.discountedPrice.toLocaleString() + '원' : '—'}</td>
+              <td><span class="booking-status-badge ${statusClass}">${statusLabel}</span></td>
+              <td style="white-space:nowrap;">
+                <select class="form-select" style="font-size:0.8rem; padding:6px 8px;" onchange="adminUpdateBooking('${b.id}', this.value)">
+                  <option value="">변경</option>
+                  <option value="confirmed" ${b.status === 'confirmed' ? 'selected' : ''}>확정</option>
+                  <option value="visited" ${b.status === 'visited' ? 'selected' : ''}>방문완료</option>
+                  <option value="noshow" ${b.status === 'noshow' ? 'selected' : ''}>노쇼</option>
+                  <option value="cancelled" ${b.status === 'cancelled' ? 'selected' : ''}>취소</option>
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      });
+    }
+
+    // 파트너 신청 목록
+    function loadPartners() {
+      db.collection('partners')
+        .orderBy('joinedAt', 'desc')
+        .onSnapshot((snapshot) => {
+          const partners = [];
+          snapshot.forEach(doc => partners.push({ id: doc.id, ...doc.data() }));
+
+          const pendingCount = partners.filter(p => p.status === 'pending').length;
+          document.getElementById('stat-pending-partners').textContent = pendingCount;
+
+          const tbody = document.getElementById('partners-table-body');
+          if (partners.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:32px; color:var(--color-text-muted);">파트너 신청이 없습니다.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = partners.map(p => {
+            const statusBadge = p.status === 'active'
+              ? '<span class="badge badge-success">승인</span>'
+              : p.status === 'pending'
+              ? '<span class="badge badge-yellow">대기중</span>'
+              : '<span class="badge badge-gray">비활성</span>';
+
+            const joinedAt = p.joinedAt
+              ? (p.joinedAt.toDate ? p.joinedAt.toDate().toLocaleDateString('ko-KR') : '')
+              : '—';
+
+            return `
+              <tr>
+                <td>${escapeHtml(p.businessName || '—')}</td>
+                <td>${escapeHtml(CATEGORY_LABELS[p.category] || p.category || '—')}</td>
+                <td>${escapeHtml(p.ownerName || '—')}</td>
+                <td>${escapeHtml(p.phone || '—')}</td>
+                <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(p.address)}">${escapeHtml(p.address || '—')}</td>
+                <td>${joinedAt}</td>
+                <td>${statusBadge}</td>
+                <td>
+                  ${p.status === 'pending'
+                    ? `<button class="btn btn-sm" style="background:var(--color-success);color:#fff;" onclick="adminApprovePartner('${p.id}')">승인</button>`
+                    : '—'
+                  }
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }, (err) => {
+          console.error('파트너 조회 오류:', err);
+        });
+    }
+
+    // ——————————————————————————————
+    // 어드민 액션
+    // ——————————————————————————————
+    async function adminActivateDeal(dealId) {
+      try {
+        await updateDealStatus(dealId, 'active');
+        showToast('딜이 활성화되었습니다.', 'success');
+      } catch (err) {
+        showToast('상태 변경 실패: ' + err.message, 'error');
+      }
+    }
+
+    async function adminCloseDeal(dealId) {
+      if (!confirm('이 딜을 마감하시겠습니까?')) return;
+      try {
+        await closeDeal(dealId);
+        showToast('딜이 마감 처리되었습니다.', 'success');
+      } catch (err) {
+        showToast('마감 처리 실패: ' + err.message, 'error');
+      }
+    }
+
+    async function adminDeleteDeal(dealId) {
+      if (!confirm('정말 이 딜을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+      try {
+        await deleteDeal(dealId);
+        showToast('딜이 삭제되었습니다.', 'success');
+      } catch (err) {
+        showToast('삭제 실패: ' + err.message, 'error');
+      }
+    }
+
+    async function adminUpdateBooking(bookingId, newStatus) {
+      if (!newStatus) return;
+      try {
+        await updateBookingStatus(bookingId, newStatus);
+        showToast('예약 상태가 변경되었습니다.', 'success');
+      } catch (err) {
+        showToast('상태 변경 실패: ' + err.message, 'error');
+      }
+    }
+
+    async function adminApprovePartner(partnerId) {
+      if (!confirm('이 파트너를 승인하시겠습니까?')) return;
+      try {
+        await db.collection('partners').doc(partnerId).update({ status: 'active' });
+        showToast('파트너가 승인되었습니다.', 'success');
+      } catch (err) {
+        showToast('승인 실패: ' + err.message, 'error');
+      }
+    }
+
+    // ——————————————————————————————
+    // 딜 등록 폼
+    // ——————————————————————————————
+    document.getElementById('deal-register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('deal-form-error');
+      errorEl.style.display = 'none';
+
+      const title = document.getElementById('deal-title').value.trim();
+      const partnerName = document.getElementById('deal-partner-name').value.trim();
+      const category = document.getElementById('deal-category').value;
+      const status = document.getElementById('deal-status').value;
+      const originalPrice = parseFloat(document.getElementById('deal-original-price').value);
+      const discountedPrice = parseFloat(document.getElementById('deal-discounted-price').value);
+      const totalSlots = parseInt(document.getElementById('deal-total-slots').value);
+      const availableDate = document.getElementById('deal-available-date').value;
+      const timeStart = document.getElementById('deal-time-start').value;
+      const timeEnd = document.getElementById('deal-time-end').value;
+      const expiresAtVal = document.getElementById('deal-expires-at').value;
+      const imageUrl = document.getElementById('deal-image-url').value.trim();
+      const description = document.getElementById('deal-description').value.trim();
+      const tagsRaw = document.getElementById('deal-tags').value.trim();
+      const location = document.getElementById('deal-location').value.trim();
+      const address = document.getElementById('deal-address').value.trim();
+
+      if (!title || !partnerName || !category || !availableDate || !expiresAtVal) {
+        errorEl.textContent = '필수 항목을 모두 입력해주세요.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      if (isNaN(originalPrice) || isNaN(discountedPrice) || isNaN(totalSlots)) {
+        errorEl.textContent = '가격 및 자리 수는 숫자로 입력해주세요.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      const expiresAt = firebase.firestore.Timestamp.fromDate(new Date(expiresAtVal));
+      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+      const btn = document.getElementById('deal-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> 등록 중...';
+
+      try {
+        const dealId = await createDeal({
+          title,
+          partnerName,
+          partnerId: '',
+          category,
+          status,
+          location,
+          address,
+          originalPrice,
+          discountedPrice,
+          availableSlots: totalSlots,
+          totalSlots,
+          availableDate,
+          availableTimeStart: timeStart,
+          availableTimeEnd: timeEnd,
+          expiresAt,
+          imageUrl,
+          description,
+          tags
+        });
+
+        showToast(`딜이 등록되었습니다! (ID: ${dealId})`, 'success');
+        document.getElementById('deal-register-form').reset();
+
+        // 딜 목록 탭으로 이동
+        document.querySelector('[data-panel="panel-deals"]').click();
+      } catch (err) {
+        console.error('딜 등록 오류:', err);
+        errorEl.textContent = '등록 실패: ' + (err.message || '알 수 없는 오류');
+        errorEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '딜 등록하기';
+      }
+    });
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+    }
+
+    // 전역 노출
+    window.adminActivateDeal = adminActivateDeal;
+    window.adminCloseDeal = adminCloseDeal;
+    window.adminDeleteDeal = adminDeleteDeal;
+    window.adminUpdateBooking = adminUpdateBooking;
+    window.adminApprovePartner = adminApprovePartner;
+  </script>
+
+  <style>
+    @media (max-width: 768px) {
+      .deal-form-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</body>
+</html>

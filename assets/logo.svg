@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="36" viewBox="0 0 120 36" role="img" aria-label="틈 TEUM">
+  <!-- 틈 한글 텍스트 -->
+  <text x="0" y="27" font-family="'Pretendard', 'Apple SD Gothic Neo', sans-serif" font-size="26" font-weight="800" fill="#2D5016" letter-spacing="-0.5">틈</text>
+  <!-- 구분 dot -->
+  <circle cx="38" cy="18" r="3" fill="#2D5016" opacity="0.4"/>
+  <!-- TEUM 영문 텍스트 -->
+  <text x="46" y="27" font-family="'Pretendard', 'Apple SD Gothic Neo', sans-serif" font-size="22" font-weight="700" fill="#2D5016" letter-spacing="1">TEUM</text>
+</svg>
